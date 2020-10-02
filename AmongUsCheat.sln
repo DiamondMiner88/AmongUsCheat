@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmongUsMemory", "AmongUsMemory\AmongUsMemory.csproj", "{9C2E0EB7-22C8-4A6C-99C5-0ED011E671A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmongUsBot", "AmongUsBot\AmongUsBot.csproj", "{9CF6B988-CE38-466E-B7ED-C9AB7C89C8C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cheat", "Cheat\Cheat.csproj", "{9CF6B988-CE38-466E-B7ED-C9AB7C89C8C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
