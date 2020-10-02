@@ -9,7 +9,7 @@ namespace Cheat
             while (true)
             {
                 // Attempt to attach to 'Among Us.exe'
-                if (HamsterCheese.AmongUsMemory.Cheese.Init())
+                if (AmongUsMemory.Main.Init())
                 {
                     Cheat.Memory.Init();
                     break;

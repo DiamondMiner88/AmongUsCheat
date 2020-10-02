@@ -1,15 +1,16 @@
-﻿using HamsterCheese.AmongUsMemory;
+﻿using AmongUsMemory;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Cheat
 {
     class Memory
     {
-        static int UPDATE_DELAY = 250;
+        static int UPDATE_DELAY = 500;
 
-        static List<PlayerData> playerDatas = new List<PlayerData>();
+        static List<AmongUsMemory.PlayerData> playerDatas = new List<AmongUsMemory.PlayerData>();
         static bool fakeImp;
 
         // Figure out which scanned 'AmongUsClients' is the actual one used
@@ -33,11 +34,15 @@ namespace Cheat
 
         public static void Init()
         {
-            HamsterCheese.AmongUsMemory.Cheese.ObserveShipStatus((uint x) => Reset());
+            AmongUsMemory.Main.ObserveShipStatus((uint x) =>
+            {
+                Console.WriteLine("Ship status changed", x);
+                Reset();
+            });
 
             Task.Factory.StartNew(() =>
             {
-                while (true)
+                while (false) // disabled since we dont have any need to update yet
                 {
                     Update();
                     System.Threading.Thread.Sleep(UPDATE_DELAY);
@@ -51,46 +56,52 @@ namespace Cheat
 
         public static void Reset()
         {
-            foreach (PlayerData p in playerDatas) p.StopObserveState();
-            playerDatas = HamsterCheese.AmongUsMemory.Cheese.GetAllPlayers();
-            foreach (PlayerData p in playerDatas) p.StartObserveState();
+            foreach (AmongUsMemory.PlayerData p in playerDatas) p.StopObserveState();
+            playerDatas = AmongUsMemory.Main.GetAllPlayers();
+            foreach (AmongUsMemory.PlayerData p in playerDatas) p.StartObserveState();
             if (playerDatas.Count == 0) return;
 
-            PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
+
+            AmongUsMemory.PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
 
             if (fakeImp != true)
             {
-                IntPtr killTimerPtr = HamsterCheese.AmongUsMemory.Utils.GetMemberPointer(player.offset_ptr, typeof(PlayerControl), "killTimer");
-                HamsterCheese.AmongUsMemory.Cheese.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "0.0");
+                IntPtr killTimerPtr = AmongUsMemory.Utils.GetMemberPointer(player.offset_ptr, typeof(PlayerControl), "killTimer");
+                AmongUsMemory.Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "0.0");
             }
 
-            // flashes intensly for some reason, fix later
-            //IntPtr lightSourcePtr = HamsterCheese.AmongUsMemory.Utils.GetMemberPointer(player.Instance.myLight, typeof(LightSource), "LightRadius");
-            //HamsterCheese.AmongUsMemory.Cheese.mem.FreezeValue(lightSourcePtr.GetAddress(), "float", "100.0");
+            Console.WriteLine("Reset");
         }
 
-        public static void Update() { }
+        public static void Update()
+        {
+            AmongUsMemory.PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
+            if (player == null) return;
+            Console.WriteLine(player.Position.x + "f, " + player.Position.y + "f");
+        }
 
-        private static void SetImposter(PlayerData player, bool setIsImposter)
+        private static void SetImposter(AmongUsMemory.PlayerData player, bool setIsImposter)
         {
             // keep track if the player is fake impostering to prevent killing while crewmate which doesnt actually register
-            IntPtr isImposterPtr = HamsterCheese.AmongUsMemory.Utils.GetMemberPointer(player.playerInfoOffset_ptr, typeof(PlayerInfo), "IsImpostor");
-            int isImposter = HamsterCheese.AmongUsMemory.Cheese.mem.ReadByte(isImposterPtr.GetAddress());
+            IntPtr isImposterPtr = AmongUsMemory.Utils.GetMemberPointer(player.playerInfoOffset_ptr, typeof(PlayerInfo), "IsImpostor");
+            int isImposter = AmongUsMemory.Main.mem.ReadByte(isImposterPtr.GetAddress());
             if ((fakeImp == false && isImposter == 0) || fakeImp == true) fakeImp = setIsImposter;
             player?.WriteMemory_Impostor(Convert.ToByte(setIsImposter));
 
-            IntPtr killTimerPtr = HamsterCheese.AmongUsMemory.Utils.GetMemberPointer(player.offset_ptr, typeof(PlayerControl), "killTimer");
-            if (fakeImp) HamsterCheese.AmongUsMemory.Cheese.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "60.0");
-            else HamsterCheese.AmongUsMemory.Cheese.mem.UnfreezeValue(killTimerPtr.GetAddress());
+            IntPtr killTimerPtr = AmongUsMemory.Utils.GetMemberPointer(player.offset_ptr, typeof(PlayerControl), "killTimer");
+            if (fakeImp) AmongUsMemory.Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "60.0");
+            else AmongUsMemory.Main.mem.UnfreezeValue(killTimerPtr.GetAddress());
         }
 
         public static void HandleConsole()
         {
             while (true)
             {
-                string input = Console.ReadLine();
-                PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
-                if (player == null)
+                string input = Console.ReadLine().ToLower();
+                AmongUsMemory.PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
+
+                string[] playerCommands = new string[] { "dead", "alive", "imp", "noimp", "fullbright", "nofullbright" };
+                if (player == null && playerCommands.Contains(input))
                 {
                     Console.WriteLine(input + "-> No local player. Do 'reset' or be in a in-progress game");
                     continue;
@@ -101,6 +112,13 @@ namespace Cheat
                         Reset();
                         Console.WriteLine(input + " -> ok");
                         break;
+                    case "quit":
+                    case "exit":
+                    case "stop":
+                        Environment.Exit(0);
+                        break;
+
+                    // Local player-required commands
                     case "dead":
                         player?.WriteMemory_IsDead(Convert.ToByte(true));
                         Console.WriteLine(input + " -> ok");
@@ -116,6 +134,14 @@ namespace Cheat
                     case "noimp":
                         SetImposter(player, false);
                         Console.WriteLine(input + " -> ok");
+                        break;
+                    case "fullbright":
+                        IntPtr lightSourcePtr = AmongUsMemory.Utils.GetMemberPointer(player.Instance.myLight, typeof(LightSource), "LightRadius");
+                        AmongUsMemory.Main.mem.FreezeValue(lightSourcePtr.GetAddress(), "float", "1000.0");
+                        break;
+                    case "nofullbright":
+                        IntPtr lightSourcePtr2 = AmongUsMemory.Utils.GetMemberPointer(player.Instance.myLight, typeof(LightSource), "LightRadius");
+                        AmongUsMemory.Main.mem.UnfreezeValue(lightSourcePtr2.GetAddress());
                         break;
                 }
             }

@@ -32,7 +32,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Memory, Version=1.2.19.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Memory.dll.1.2.19\lib\net472\Memory.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\_dll\Memory.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -44,8 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cheese.cs" />
-    <Compile Include="EngineOffset.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="Offsets.cs" />
     <Compile Include="Methods.cs" />
     <Compile Include="PlayerData.cs" />
     <Compile Include="ProcessMemory.cs" />
@@ -58,9 +59,6 @@
     <Compile Include="Structs\ShipStatus.cs" />
     <Compile Include="Structs\_Vector2.cs" />
     <Compile Include="Utils.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

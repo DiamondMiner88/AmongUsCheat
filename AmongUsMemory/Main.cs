@@ -2,31 +2,31 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace HamsterCheese.AmongUsMemory
+namespace AmongUsMemory
 {
-    public static class Cheese
+    public static class Main
     {
-
         public static Memory.Mem mem = new Memory.Mem();
         public static ProcessMemory ProcessMemory = null;
+
+        // Increase this if your computer can't handle the load very well. On a Ryzen 3900x with 500ms delay it takes about 11-16% CPU usage.
+        // Remove the scanning later anyways and replace with a keybind system.
+        public static int SCAN_DELAY = 500;
+
         public static bool Init()
         {
-            var state = mem.OpenProcess("Among Us");
-
+            bool state = mem.OpenProcess("Among Us");
             if (state)
             {
                 Methods.Init();
                 Process proc = Process.GetProcessesByName("Among Us")[0];
                 ProcessMemory = new ProcessMemory(proc);
                 ProcessMemory.Open(ProcessAccess.AllAccess);
-                return true;
             }
-            return false;
+            return state;
         }
 
         private static ShipStatus prevShipStatus;
@@ -39,8 +39,8 @@ namespace HamsterCheese.AmongUsMemory
         {
             while (Tokens.ContainsKey("ObserveShipStatus") && Tokens["ObserveShipStatus"].IsCancellationRequested == false)
             {
-                Thread.Sleep(250);
-                shipStatus = Cheese.GetShipStatus();
+                Thread.Sleep(SCAN_DELAY);
+                shipStatus = GetShipStatus();
                 if (prevShipStatus.OwnerId != shipStatus.OwnerId)
                 {
                     prevShipStatus = shipStatus;
@@ -60,36 +60,26 @@ namespace HamsterCheese.AmongUsMemory
             }
 
             Tokens.Add("ObserveShipStatus", cts);
-            Cheese.onChangeShipStatus = onChangeShipStatus;
+            Main.onChangeShipStatus = onChangeShipStatus;
             Task.Factory.StartNew(_ObserveShipStatus, cts.Token);
         }
 
         public static ShipStatus GetShipStatus()
-        { 
+        {
             ShipStatus shipStatus = new ShipStatus();
-            byte[] shipAob = Cheese.mem.ReadBytes(Pattern.ShipStatus_Pointer, Utils.SizeOf<ShipStatus>());
+            byte[] shipAob = mem.ReadBytes(Pattern.ShipStatus_Pointer, Utils.SizeOf<ShipStatus>());
             var aobStr = MakeAobString(shipAob, 4, "00 00 00 00 ?? ?? ?? ??");
-            var aobResults = Cheese.mem.AoBScan(aobStr, true, true); 
-            aobResults.Wait();  
+            var aobResults = mem.AoBScan(aobStr, true, true);
+            aobResults.Wait();
             foreach (var result in aobResults.Result)
             {
-
-                byte[] resultByte = Cheese.mem.ReadBytes(result.GetAddress(), Utils.SizeOf<ShipStatus>());
-                ShipStatus resultInst = Utils.FromBytes<ShipStatus>(resultByte); 
+                byte[] resultByte = mem.ReadBytes(result.GetAddress(), Utils.SizeOf<ShipStatus>());
+                ShipStatus resultInst = Utils.FromBytes<ShipStatus>(resultByte);
                 if (resultInst.AllVents != IntPtr.Zero && resultInst.NetId < uint.MaxValue - 10000)
-                {
                     if (resultInst.MapScale < 6470545000000 && resultInst.MapScale > 0.1f)
-                    {  
-                        shipStatus = resultInst;  
-                    }
-                }
-            }  
+                        shipStatus = resultInst;
+            }
             return shipStatus;
-        }
-
-        private static Exception Exception(string v)
-        {
-            throw new NotImplementedException();
         }
 
         public static string MakeAobString(byte[] aobTarget, int length, string unknownText = "?? ?? ?? ??")
@@ -119,23 +109,21 @@ namespace HamsterCheese.AmongUsMemory
         }
         public static List<PlayerData> GetAllPlayers()
         {
-            List<PlayerData > datas = new List<PlayerData>();
+            List<PlayerData> datas = new List<PlayerData>();
 
             // find player pointer
-            byte[] playerAoB = Cheese.mem.ReadBytes(Pattern.PlayerControl_Pointer, Utils.SizeOf<PlayerControl>());
+            byte[] playerAoB = mem.ReadBytes(Pattern.PlayerControl_Pointer, Utils.SizeOf<PlayerControl>());
             // aob pattern
-            string aobData = MakeAobString(playerAoB, 4, "?? ?? ?? ??"); 
+            string aobData = MakeAobString(playerAoB, 4, "?? ?? ?? ??");
             // get result 
-            var result = Cheese.mem.AoBScan(aobData, true, true);
+            var result = mem.AoBScan(aobData, true, true);
             result.Wait();
 
-
-
-            var results =    result.Result;
+            var results = result.Result;
             // real-player
             foreach (var x in results)
             {
-                var bytes = Cheese.mem.ReadBytes(x.GetAddress(), Utils.SizeOf<PlayerControl>());
+                var bytes = mem.ReadBytes(x.GetAddress(), Utils.SizeOf<PlayerControl>());
                 var PlayerControl = Utils.FromBytes<PlayerControl>(bytes);
                 // filter garbage instance datas.
                 if (PlayerControl.SpawnFlags == 257 && PlayerControl.NetId < uint.MaxValue - 10000)

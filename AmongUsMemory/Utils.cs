@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 
-namespace HamsterCheese.AmongUsMemory
+namespace AmongUsMemory
 {
     public static class Utils
     {
@@ -68,13 +68,13 @@ namespace HamsterCheese.AmongUsMemory
         public static string ReadString(IntPtr offset)
         {
             //string pointer + 8 = length
-            var length = HamsterCheese.AmongUsMemory.Cheese.mem.ReadInt(offset.Sum(8).GetAddress());
+            var length = AmongUsMemory.Main.mem.ReadInt(offset.Sum(8).GetAddress());
 
             //unit of string is 2byte.
             var format_length = length * 2;
 
             //string pointer + 12 = value
-            var strByte = HamsterCheese.AmongUsMemory.Cheese.mem.ReadBytes(offset.Sum(12).GetAddress(), format_length); 
+            var strByte = AmongUsMemory.Main.mem.ReadBytes(offset.Sum(12).GetAddress(), format_length); 
 
             StringBuilder sb = new StringBuilder(); 
             for (int i = 0; i < strByte.Length; i += 2)
