@@ -47,11 +47,28 @@
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Memory, Version=1.2.19.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="Memory, Version=1.2.19.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\_dll\Memory.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HackGUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HackGUI.Designer.cs">
+      <DependentUpon>HackGUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="TaskPositions.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Program.cs" />
@@ -69,6 +86,19 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <Content Include="Wallpaper.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="HackGUI.resx">
+      <DependentUpon>HackGUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
