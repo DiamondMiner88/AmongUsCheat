@@ -7,12 +7,12 @@ namespace Cheat
     {
         public HackGUI()
         {
-            TopMost = true;
             InitializeComponent();
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            panel1.BorderStyle = BorderStyle.None;
+            TopMost = true;
             MinimizeBox = true;
             MaximizeBox = false;
-            panel1.BorderStyle = BorderStyle.None;
         }
 
         private void HackGUI_Load(object sender, EventArgs e)
@@ -26,6 +26,8 @@ namespace Cheat
         private void SetKillCooldown_TextChanged(object sender, EventArgs e)
         {
             TextBox tb = sender as TextBox;
+            if (float.TryParse(tb.Text, out float newcooldown))
+                Memory.SetKillCoolDown(newcooldown);
         }
 
         private void SetVisionFull_CheckedChanged(object sender, EventArgs e)

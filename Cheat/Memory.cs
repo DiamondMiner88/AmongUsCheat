@@ -162,7 +162,7 @@ namespace Cheat
             return 0;
         }
 
-        public static int SetKillCoolDown(int seconds)
+        public static int SetKillCoolDown(float seconds)
         {
             if (fakeImp) return 1;
             PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
@@ -174,16 +174,12 @@ namespace Cheat
                     return -1;
             }
             IntPtr killTimerPtr = Utils.GetMemberPointer(player.offset_ptr, typeof(PlayerControl), "killTimer");
-            Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", seconds.ToString());
+            Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", seconds.ToString("0.0"));
             return 0;
         }
 
-        public static int SetBrightness(string value)
+        public static int SetBrightness(float brightness)
         {
-            double not_needed;
-            if (!double.TryParse(value, out not_needed))
-                return -2;
-
             PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
             if (player == null)
             {
@@ -194,7 +190,7 @@ namespace Cheat
             }
 
             IntPtr lightSourcePtr = Utils.GetMemberPointer(player.Instance.myLight, typeof(LightSource), "LightRadius");
-            Main.mem.FreezeValue(lightSourcePtr.GetAddress(), "float", value);
+            Main.mem.FreezeValue(lightSourcePtr.GetAddress(), "float", brightness.ToString("0.0"));
             return 0;
         }
     }
