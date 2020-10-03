@@ -19,12 +19,16 @@ namespace Cheat
                     break;
                 }
                 Console.Clear();
-                Console.WriteLine("Could not attach to Among Us.exe, trying again in 5 seconds. This most likely means its not running.");
-                Thread.Sleep(5000);
+                Console.WriteLine("Could not attach to 'Among Us.exe'. This most likely means its not running, or the file is wrongly named.");
+                for (int i = 10; i > 0; i--)
+                {
+                    Console.Write("\r" + new string(' ', Console.WindowWidth - 1) + "\r");
+                    Console.Write("Attempting again in {0} seconds...", i);
+                    Thread.Sleep(1000);
+                }
             }
 
             Task.Factory.StartNew(() => hackGUI.ShowDialog());
-
             Thread.Sleep(3600000); // Wait for one hour before exiting
             Exit();
         }
