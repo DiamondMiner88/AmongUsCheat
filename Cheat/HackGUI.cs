@@ -10,7 +10,8 @@ namespace Cheat
             TopMost = true;
             InitializeComponent();
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            MinimizeBox = false;
+            MinimizeBox = true;
+            MaximizeBox = false;
             panel1.BorderStyle = BorderStyle.None;
         }
 
