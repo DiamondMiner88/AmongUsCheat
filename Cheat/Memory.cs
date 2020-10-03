@@ -107,7 +107,7 @@ namespace Cheat
         {
             PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
 
-            string[] playerCommands = new string[] { "dead", "alive", "imp", "noimp", "fullbright", "nofullbright" };
+            string[] playerCommands = new string[] { "dead", "alive", "imposter", "crewmate", "fullbright", "nofullbright" };
             if (player == null && playerCommands.Contains(input))
             {
                 Reset();
@@ -128,7 +128,7 @@ namespace Cheat
                 case "quit":
                 case "exit":
                 case "stop":
-                    Environment.Exit(0);
+                    Program.Exit();
                     break;
 
                 // Local player-required commands
@@ -140,11 +140,11 @@ namespace Cheat
                     player?.WriteMemory_IsDead(Convert.ToByte(false));
                     Console.WriteLine(input + " -> ok");
                     break;
-                case "imp":
+                case "imposter":
                     SetImposter(player, true);
                     Console.WriteLine(input + " -> ok");
                     break;
-                case "noimp":
+                case "crewmate":
                     SetImposter(player, false);
                     Console.WriteLine(input + " -> ok");
                     break;

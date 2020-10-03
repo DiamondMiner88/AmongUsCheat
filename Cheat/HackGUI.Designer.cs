@@ -27,18 +27,18 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.statusLabel = new System.Windows.Forms.Label();
-            this.deadRadio = new System.Windows.Forms.RadioButton();
-            this.aliveRadio = new System.Windows.Forms.RadioButton();
-            this.imposterRadio = new System.Windows.Forms.RadioButton();
+            this.SetDead = new System.Windows.Forms.RadioButton();
+            this.SetAlive = new System.Windows.Forms.RadioButton();
+            this.SetImposter = new System.Windows.Forms.RadioButton();
             this.playerStatusLabel = new System.Windows.Forms.Label();
-            this.crewmateRadio = new System.Windows.Forms.RadioButton();
+            this.SetCrewmate = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.SetKillCooldown = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.normalRadio = new System.Windows.Forms.RadioButton();
+            this.SetVisionNormal = new System.Windows.Forms.RadioButton();
             this.visionLabel = new System.Windows.Forms.Label();
-            this.fullRadio = new System.Windows.Forms.RadioButton();
+            this.SetVisionFull = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -48,9 +48,9 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.panel1);
-            this.groupBox1.Controls.Add(this.imposterRadio);
+            this.groupBox1.Controls.Add(this.SetImposter);
             this.groupBox1.Controls.Add(this.playerStatusLabel);
-            this.groupBox1.Controls.Add(this.crewmateRadio);
+            this.groupBox1.Controls.Add(this.SetCrewmate);
             this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
@@ -63,8 +63,8 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.Transparent;
             this.panel1.Controls.Add(this.statusLabel);
-            this.panel1.Controls.Add(this.deadRadio);
-            this.panel1.Controls.Add(this.aliveRadio);
+            this.panel1.Controls.Add(this.SetDead);
+            this.panel1.Controls.Add(this.SetAlive);
             this.panel1.Location = new System.Drawing.Point(0, 76);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(101, 82);
@@ -79,41 +79,41 @@
             this.statusLabel.TabIndex = 3;
             this.statusLabel.Text = "Status";
             // 
-            // deadRadio
+            // SetDead
             // 
-            this.deadRadio.AutoSize = true;
-            this.deadRadio.Location = new System.Drawing.Point(10, 50);
-            this.deadRadio.Name = "deadRadio";
-            this.deadRadio.Size = new System.Drawing.Size(51, 17);
-            this.deadRadio.TabIndex = 5;
-            this.deadRadio.TabStop = true;
-            this.deadRadio.Text = "Dead";
-            this.deadRadio.UseVisualStyleBackColor = true;
-            this.deadRadio.CheckedChanged += new System.EventHandler(this.deadRadio_CheckedChanged);
+            this.SetDead.AutoSize = true;
+            this.SetDead.Location = new System.Drawing.Point(10, 50);
+            this.SetDead.Name = "SetDead";
+            this.SetDead.Size = new System.Drawing.Size(51, 17);
+            this.SetDead.TabIndex = 5;
+            this.SetDead.TabStop = true;
+            this.SetDead.Text = "Dead";
+            this.SetDead.UseVisualStyleBackColor = true;
+            this.SetDead.CheckedChanged += new System.EventHandler(this.SetDead_CheckedChanged);
             // 
-            // aliveRadio
+            // SetAlive
             // 
-            this.aliveRadio.AutoSize = true;
-            this.aliveRadio.Location = new System.Drawing.Point(10, 27);
-            this.aliveRadio.Name = "aliveRadio";
-            this.aliveRadio.Size = new System.Drawing.Size(48, 17);
-            this.aliveRadio.TabIndex = 4;
-            this.aliveRadio.TabStop = true;
-            this.aliveRadio.Text = "Alive";
-            this.aliveRadio.UseVisualStyleBackColor = true;
-            this.aliveRadio.CheckedChanged += new System.EventHandler(this.aliveRadio_CheckedChanged);
+            this.SetAlive.AutoSize = true;
+            this.SetAlive.Location = new System.Drawing.Point(10, 27);
+            this.SetAlive.Name = "SetAlive";
+            this.SetAlive.Size = new System.Drawing.Size(48, 17);
+            this.SetAlive.TabIndex = 4;
+            this.SetAlive.TabStop = true;
+            this.SetAlive.Text = "Alive";
+            this.SetAlive.UseVisualStyleBackColor = true;
+            this.SetAlive.CheckedChanged += new System.EventHandler(this.SetAlive_CheckedChanged);
             // 
-            // imposterRadio
+            // SetImposter
             // 
-            this.imposterRadio.AutoSize = true;
-            this.imposterRadio.Location = new System.Drawing.Point(10, 59);
-            this.imposterRadio.Name = "imposterRadio";
-            this.imposterRadio.Size = new System.Drawing.Size(65, 17);
-            this.imposterRadio.TabIndex = 2;
-            this.imposterRadio.TabStop = true;
-            this.imposterRadio.Text = "Imposter";
-            this.imposterRadio.UseVisualStyleBackColor = true;
-            this.imposterRadio.CheckedChanged += new System.EventHandler(this.imposterRadio_CheckedChanged);
+            this.SetImposter.AutoSize = true;
+            this.SetImposter.Location = new System.Drawing.Point(10, 59);
+            this.SetImposter.Name = "SetImposter";
+            this.SetImposter.Size = new System.Drawing.Size(65, 17);
+            this.SetImposter.TabIndex = 2;
+            this.SetImposter.TabStop = true;
+            this.SetImposter.Text = "Imposter";
+            this.SetImposter.UseVisualStyleBackColor = true;
+            this.SetImposter.CheckedChanged += new System.EventHandler(this.SetImposter_CheckedChanged);
             // 
             // playerStatusLabel
             // 
@@ -124,22 +124,22 @@
             this.playerStatusLabel.TabIndex = 1;
             this.playerStatusLabel.Text = "Player Status";
             // 
-            // crewmateRadio
+            // SetCrewmate
             // 
-            this.crewmateRadio.AutoSize = true;
-            this.crewmateRadio.Location = new System.Drawing.Point(10, 36);
-            this.crewmateRadio.Name = "crewmateRadio";
-            this.crewmateRadio.Size = new System.Drawing.Size(72, 17);
-            this.crewmateRadio.TabIndex = 0;
-            this.crewmateRadio.TabStop = true;
-            this.crewmateRadio.Text = "Crewmate";
-            this.crewmateRadio.UseVisualStyleBackColor = true;
-            this.crewmateRadio.CheckedChanged += new System.EventHandler(this.crewmateRadio_CheckedChanged);
+            this.SetCrewmate.AutoSize = true;
+            this.SetCrewmate.Location = new System.Drawing.Point(10, 36);
+            this.SetCrewmate.Name = "SetCrewmate";
+            this.SetCrewmate.Size = new System.Drawing.Size(72, 17);
+            this.SetCrewmate.TabIndex = 0;
+            this.SetCrewmate.TabStop = true;
+            this.SetCrewmate.Text = "Crewmate";
+            this.SetCrewmate.UseVisualStyleBackColor = true;
+            this.SetCrewmate.CheckedChanged += new System.EventHandler(this.SetCrewmate_CheckedChanged);
             // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Controls.Add(this.textBox1);
+            this.groupBox2.Controls.Add(this.SetKillCooldown);
             this.groupBox2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.groupBox2.Location = new System.Drawing.Point(134, 12);
             this.groupBox2.Name = "groupBox2";
@@ -157,19 +157,19 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Kill Cooldown: ";
             // 
-            // textBox1
+            // SetKillCooldown
             // 
-            this.textBox1.Location = new System.Drawing.Point(9, 36);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(73, 20);
-            this.textBox1.TabIndex = 0;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.SetKillCooldown.Location = new System.Drawing.Point(9, 36);
+            this.SetKillCooldown.Name = "SetKillCooldown";
+            this.SetKillCooldown.Size = new System.Drawing.Size(73, 20);
+            this.SetKillCooldown.TabIndex = 0;
+            this.SetKillCooldown.TextChanged += new System.EventHandler(this.SetKillCooldown_TextChanged);
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.normalRadio);
+            this.groupBox3.Controls.Add(this.SetVisionNormal);
             this.groupBox3.Controls.Add(this.visionLabel);
-            this.groupBox3.Controls.Add(this.fullRadio);
+            this.groupBox3.Controls.Add(this.SetVisionFull);
             this.groupBox3.ForeColor = System.Drawing.Color.White;
             this.groupBox3.Location = new System.Drawing.Point(134, 94);
             this.groupBox3.Name = "groupBox3";
@@ -178,17 +178,17 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Crewmate";
             // 
-            // normalRadio
+            // SetVisionNormal
             // 
-            this.normalRadio.AutoSize = true;
-            this.normalRadio.Location = new System.Drawing.Point(12, 59);
-            this.normalRadio.Name = "normalRadio";
-            this.normalRadio.Size = new System.Drawing.Size(61, 17);
-            this.normalRadio.TabIndex = 2;
-            this.normalRadio.TabStop = true;
-            this.normalRadio.Text = "Normal ";
-            this.normalRadio.UseVisualStyleBackColor = true;
-            this.normalRadio.CheckedChanged += new System.EventHandler(this.normalRadio_CheckedChanged);
+            this.SetVisionNormal.AutoSize = true;
+            this.SetVisionNormal.Location = new System.Drawing.Point(12, 59);
+            this.SetVisionNormal.Name = "SetVisionNormal";
+            this.SetVisionNormal.Size = new System.Drawing.Size(61, 17);
+            this.SetVisionNormal.TabIndex = 2;
+            this.SetVisionNormal.TabStop = true;
+            this.SetVisionNormal.Text = "Normal ";
+            this.SetVisionNormal.UseVisualStyleBackColor = true;
+            this.SetVisionNormal.CheckedChanged += new System.EventHandler(this.SetVisionNormal_CheckedChanged);
             // 
             // visionLabel
             // 
@@ -199,17 +199,17 @@
             this.visionLabel.TabIndex = 1;
             this.visionLabel.Text = "Vision";
             // 
-            // fullRadio
+            // SetVisionFull
             // 
-            this.fullRadio.AutoSize = true;
-            this.fullRadio.Location = new System.Drawing.Point(12, 36);
-            this.fullRadio.Name = "fullRadio";
-            this.fullRadio.Size = new System.Drawing.Size(41, 17);
-            this.fullRadio.TabIndex = 0;
-            this.fullRadio.TabStop = true;
-            this.fullRadio.Text = "Full";
-            this.fullRadio.UseVisualStyleBackColor = true;
-            this.fullRadio.CheckedChanged += new System.EventHandler(this.fullRadio_CheckedChanged);
+            this.SetVisionFull.AutoSize = true;
+            this.SetVisionFull.Location = new System.Drawing.Point(12, 36);
+            this.SetVisionFull.Name = "SetVisionFull";
+            this.SetVisionFull.Size = new System.Drawing.Size(41, 17);
+            this.SetVisionFull.TabIndex = 0;
+            this.SetVisionFull.TabStop = true;
+            this.SetVisionFull.Text = "Full";
+            this.SetVisionFull.UseVisualStyleBackColor = true;
+            this.SetVisionFull.CheckedChanged += new System.EventHandler(this.SetVisionFull_CheckedChanged);
             // 
             // HackGUI
             // 
@@ -224,6 +224,8 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "HackGUI";
             this.Text = "I\'m Among Us | Among Us Hacks";
+            this.Load += new System.EventHandler(this.HackGUI_Load);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.HackGUI_Closed);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -240,18 +242,18 @@
 
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label playerStatusLabel;
-        private System.Windows.Forms.RadioButton crewmateRadio;
-        private System.Windows.Forms.RadioButton imposterRadio;
-        private System.Windows.Forms.RadioButton deadRadio;
-        private System.Windows.Forms.RadioButton aliveRadio;
+        private System.Windows.Forms.RadioButton SetCrewmate;
+        private System.Windows.Forms.RadioButton SetImposter;
+        private System.Windows.Forms.RadioButton SetDead;
+        private System.Windows.Forms.RadioButton SetAlive;
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox SetKillCooldown;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label visionLabel;
-        private System.Windows.Forms.RadioButton fullRadio;
-        private System.Windows.Forms.RadioButton normalRadio;
+        private System.Windows.Forms.RadioButton SetVisionFull;
+        private System.Windows.Forms.RadioButton SetVisionNormal;
         private System.Windows.Forms.Panel panel1;
     }
 }

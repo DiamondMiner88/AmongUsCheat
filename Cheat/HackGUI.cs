@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Cheat {
-    public partial class HackGUI : Form {
-        public HackGUI() {
+namespace Cheat
+{
+    public partial class HackGUI : Form
+    {
+        public HackGUI()
+        {
             TopMost = true;
             InitializeComponent();
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -18,36 +14,65 @@ namespace Cheat {
             panel1.BorderStyle = BorderStyle.None;
         }
 
-        private void crewmateRadio_CheckedChanged(object sender, EventArgs e) {
-            Memory.RunCommand("noimp");
+        private void HackGUI_Load(object sender, EventArgs e)
+        {
+            // set default values if any
         }
 
-        private void imposterRadio_CheckedChanged(object sender, EventArgs e) {
-            Memory.RunCommand("imp");
+        private void HackGUI_Closed(object sender, FormClosedEventArgs e) =>
+            Program.Exit();
+
+        private void SetKillCooldown_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = sender as TextBox;
         }
 
-        private void aliveRadio_CheckedChanged(object sender, EventArgs e) {
-            Memory.RunCommand("alive");
-        }
+        private void SetVisionFull_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton radioButton = sender as RadioButton;
+            if (!radioButton.Checked) return;
 
-        private void deadRadio_CheckedChanged(object sender, EventArgs e) {
-            Memory.RunCommand("dead");
-        }
-
-        private void fullRadio_CheckedChanged(object sender, EventArgs e) {
             Memory.RunCommand("fullbright");
         }
 
-        private void normalRadio_CheckedChanged(object sender, EventArgs e) {
+        private void SetVisionNormal_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton radioButton = sender as RadioButton;
+            if (!radioButton.Checked) return;
+
             Memory.RunCommand("nofullbright");
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e) {
-            try {
-                
-            } catch {
+        private void SetAlive_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton radioButton = sender as RadioButton;
+            if (!radioButton.Checked) return;
 
-            }
+            Memory.RunCommand("alive");
+        }
+
+        private void SetDead_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton radioButton = sender as RadioButton;
+            if (!radioButton.Checked) return;
+
+            Memory.RunCommand("dead");
+        }
+
+        private void SetCrewmate_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton radioButton = sender as RadioButton;
+            if (!radioButton.Checked) return;
+
+            Memory.RunCommand("crewmate");
+        }
+
+        private void SetImposter_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton radioButton = sender as RadioButton;
+            if (!radioButton.Checked) return;
+
+            Memory.RunCommand("imposter");
         }
     }
 }

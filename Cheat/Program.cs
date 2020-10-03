@@ -32,10 +32,10 @@ namespace Cheat
         public static void Exit()
         {
             hackGUI.Close();
-            // Weird 'protected memory' error when the among us client is already closed
-            //bool procMemExit = AmongUsMemory.Main.ProcessMemory.Close();
-            //Environment.Exit(procMemExit ? 0 : -1);
-            Environment.Exit(0);
+
+            // idk if it does anything, but i think it cleans something up
+            bool procMemExit = AmongUsMemory.Main.ProcessMemory.Close();
+            Environment.Exit(procMemExit ? 0 : -1);
         }
     }
 }
