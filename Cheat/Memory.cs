@@ -42,7 +42,7 @@ namespace Cheat
 
             Task.Factory.StartNew(() =>
             {
-                while (false) // disabled since we dont have any need to update yet
+                while (true)
                 {
                     Update();
                     System.Threading.Thread.Sleep(UPDATE_DELAY);
@@ -64,7 +64,7 @@ namespace Cheat
 
             AmongUsMemory.PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
 
-            if (fakeImp != true)
+            if (fakeImp != true && player != null)
             {
                 IntPtr killTimerPtr = AmongUsMemory.Utils.GetMemberPointer(player.offset_ptr, typeof(PlayerControl), "killTimer");
                 AmongUsMemory.Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "0.0");
@@ -75,9 +75,18 @@ namespace Cheat
 
         public static void Update()
         {
-            AmongUsMemory.PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
-            if (player == null) return;
-            Console.WriteLine(player.Position.x + "f, " + player.Position.y + "f");
+            //AmongUsMemory.PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
+            //if (player == null) return;
+            //Console.WriteLine(player.Position.x + "f, " + player.Position.y + "f");
+        }
+
+        public static void HandleConsole()
+        {
+            while (true)
+            {
+                string input = Console.ReadLine().ToLower();
+                RunCommand(input);
+            }
         }
 
         private static void SetImposter(AmongUsMemory.PlayerData player, bool setIsImposter)
@@ -93,77 +102,25 @@ namespace Cheat
             else Main.mem.UnfreezeValue(killTimerPtr.GetAddress());
         }
 
-        public static void HandleConsole()
+
+        public static int RunCommand(string input)
         {
-            while (true)
-            {
-                string input = Console.ReadLine().ToLower();
-
-                int output = RunCommand(input);
-                if (output == -1) {
-                    Console.WriteLine("Please join a game!");
-                }
-                AmongUsMemory.PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
-
-                string[] playerCommands = new string[] { "dead", "alive", "imp", "noimp", "fullbright", "nofullbright" };
-                if (player == null && playerCommands.Contains(input)) {
-                    Console.WriteLine(input + "-> No local player. Do 'reset' or be in a in-progress game");
-                    continue;
-                }
-                /*
-                switch (input)
-                {
-                    case "reset":
-                        Reset();
-                        Console.WriteLine(input + " -> ok");
-                        break;
-                    case "quit":
-                    case "exit":
-                    case "stop":
-                        Environment.Exit(0);
-                        break;
-
-                    // Local player-required commands
-                    case "dead":
-                        player?.WriteMemory_IsDead(Convert.ToByte(true));
-                        Console.WriteLine(input + " -> ok");
-                        break;
-                    case "alive":
-                        player?.WriteMemory_IsDead(Convert.ToByte(false));
-                        Console.WriteLine(input + " -> ok");
-                        break;
-                    case "imp":
-                        SetImposter(player, true);
-                        Console.WriteLine(input + " -> ok");
-                        break;
-                    case "noimp":
-                        SetImposter(player, false);
-                        Console.WriteLine(input + " -> ok");
-                        break;
-                    case "fullbright":
-                        IntPtr lightSourcePtr = AmongUsMemory.Utils.GetMemberPointer(player.Instance.myLight, typeof(LightSource), "LightRadius");
-                        AmongUsMemory.Main.mem.FreezeValue(lightSourcePtr.GetAddress(), "float", "1000.0");
-                        break;
-                    case "nofullbright":
-                        IntPtr lightSourcePtr2 = AmongUsMemory.Utils.GetMemberPointer(player.Instance.myLight, typeof(LightSource), "LightRadius");
-                        AmongUsMemory.Main.mem.UnfreezeValue(lightSourcePtr2.GetAddress());
-                        break;
-                }*/
-            }
-        }
-
-        public static int RunCommand(string input) {
             PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
+
             string[] playerCommands = new string[] { "dead", "alive", "imp", "noimp", "fullbright", "nofullbright" };
-            if (player == null && playerCommands.Contains(input)) {
-                Console.WriteLine(input + "-> No local player. Do 'reset' or be in a in-progress game");
+            if (player == null && playerCommands.Contains(input))
+            {
                 Reset();
-                Console.WriteLine("Reset");
-                if (player == null && playerCommands.Contains(input)) {
+                player = playerDatas.Find((p) => p.IsLocalPlayer);
+                if (player == null)
+                {
+                    Console.WriteLine(input + " -> No local player. Do 'reset' or be in a in-progress game");
                     return -1;
                 }
             }
-            switch (input) {
+
+            switch (input)
+            {
                 case "reset":
                     Reset();
                     Console.WriteLine(input + " -> ok");
@@ -194,43 +151,48 @@ namespace Cheat
                 case "fullbright":
                     IntPtr lightSourcePtr = Utils.GetMemberPointer(player.Instance.myLight, typeof(LightSource), "LightRadius");
                     Main.mem.FreezeValue(lightSourcePtr.GetAddress(), "float", "1000.0");
+                    Console.WriteLine(input + " -> ok");
                     break;
                 case "nofullbright":
                     IntPtr lightSourcePtr2 = Utils.GetMemberPointer(player.Instance.myLight, typeof(LightSource), "LightRadius");
                     Main.mem.UnfreezeValue(lightSourcePtr2.GetAddress());
+                    Console.WriteLine(input + " -> ok");
                     break;
             }
             return 0;
         }
 
-        public static int SetKillCoolDown(int seconds) {
+        public static int SetKillCoolDown(int seconds)
+        {
             if (fakeImp) return 1;
             PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
-            if (player == null) {
+            if (player == null)
+            {
                 Reset();
-                Console.WriteLine("Reset");
-                if (player == null) {
+                player = playerDatas.Find((p) => p.IsLocalPlayer);
+                if (player == null)
                     return -1;
-                }
             }
             IntPtr killTimerPtr = Utils.GetMemberPointer(player.offset_ptr, typeof(PlayerControl), "killTimer");
             Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", seconds.ToString());
             return 0;
         }
 
-        public static int SetBrightness(string value) {
+        public static int SetBrightness(string value)
+        {
             double not_needed;
-            if (!double.TryParse(value, out not_needed)) {
+            if (!double.TryParse(value, out not_needed))
                 return -2;
-            }
+
             PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
-            if (player == null) {
+            if (player == null)
+            {
                 Reset();
-                Console.WriteLine("Reset");
-                if (player == null) {
+                player = playerDatas.Find((p) => p.IsLocalPlayer);
+                if (player == null)
                     return -1;
-                }
             }
+
             IntPtr lightSourcePtr = Utils.GetMemberPointer(player.Instance.myLight, typeof(LightSource), "LightRadius");
             Main.mem.FreezeValue(lightSourcePtr.GetAddress(), "float", value);
             return 0;

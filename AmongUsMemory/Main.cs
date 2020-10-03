@@ -61,7 +61,7 @@ namespace AmongUsMemory
 
             Tokens.Add("ObserveShipStatus", cts);
             Main.onChangeShipStatus = onChangeShipStatus;
-            Task.Factory.StartNew(_ObserveShipStatus, cts.Token);
+            //Task.Factory.StartNew(_ObserveShipStatus, cts.Token);
         }
 
         public static ShipStatus GetShipStatus()

@@ -86,7 +86,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
-    <Content Include="Wallpaper.jpg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="HackGUI.resx">
