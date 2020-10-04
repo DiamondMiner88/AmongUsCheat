@@ -107,9 +107,9 @@ namespace AmongUsMemory
             }
             return aobData;
         }
-        public static List<PlayerData> GetAllPlayers()
+        public static List<Player> GetAllPlayers()
         {
-            List<PlayerData> datas = new List<PlayerData>();
+            List<Player> datas = new List<Player>();
 
             // find player pointer
             byte[] playerAoB = mem.ReadBytes(Pattern.PlayerControl_Pointer, Utils.SizeOf<PlayerControl>());
@@ -128,11 +128,11 @@ namespace AmongUsMemory
                 // filter garbage instance datas.
                 if (PlayerControl.SpawnFlags == 257 && PlayerControl.NetId < uint.MaxValue - 10000)
                 {
-                    datas.Add(new PlayerData()
+                    datas.Add(new Player()
                     {
                         Instance = PlayerControl,
-                        offset_str = x.GetAddress(),
-                        offset_ptr = new IntPtr((int)x)
+                        playerControlOffset = x.GetAddress(),
+                        playerControlPtr = new IntPtr((int)x)
                     });
                 }
             }

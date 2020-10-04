@@ -10,7 +10,7 @@ namespace Cheat
     {
         static int UPDATE_DELAY = 500;
 
-        static List<AmongUsMemory.PlayerData> playerDatas = new List<AmongUsMemory.PlayerData>();
+        static List<AmongUsMemory.Player> playerDatas = new List<AmongUsMemory.Player>();
         static bool fakeImp;
 
         // Figure out which scanned 'AmongUsClients' is the actual one used
@@ -56,17 +56,17 @@ namespace Cheat
 
         public static void Reset()
         {
-            foreach (AmongUsMemory.PlayerData p in playerDatas) p.StopObserveState();
+            foreach (AmongUsMemory.Player p in playerDatas) p.StopObserveState();
             playerDatas = AmongUsMemory.Main.GetAllPlayers();
-            foreach (AmongUsMemory.PlayerData p in playerDatas) p.StartObserveState();
+            foreach (AmongUsMemory.Player p in playerDatas) p.StartObserveState();
             if (playerDatas.Count == 0) return;
 
 
-            AmongUsMemory.PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
+            AmongUsMemory.Player player = playerDatas.Find((p) => p.IsLocalPlayer);
 
             if (fakeImp != true && player != null)
             {
-                IntPtr killTimerPtr = AmongUsMemory.Utils.GetMemberPointer(player.offset_ptr, typeof(PlayerControl), "killTimer");
+                IntPtr killTimerPtr = AmongUsMemory.Utils.GetMemberPointer(player.playerControlPtr, typeof(PlayerControl), "killTimer");
                 AmongUsMemory.Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "0.0");
             }
 
@@ -89,15 +89,15 @@ namespace Cheat
             }
         }
 
-        private static void SetImposter(AmongUsMemory.PlayerData player, bool setIsImposter)
+        private static void SetImposter(AmongUsMemory.Player player, bool setIsImposter)
         {
             // keep track if the player is fake impostering to prevent killing while crewmate which doesnt actually register
-            IntPtr isImposterPtr = Utils.GetMemberPointer(player.playerInfoOffset_ptr, typeof(PlayerInfo), "IsImpostor");
+            IntPtr isImposterPtr = Utils.GetMemberPointer(player.playerInfoOffsetPtr, typeof(PlayerInfo), "IsImpostor");
             int isImposter = Main.mem.ReadByte(isImposterPtr.GetAddress());
             if ((fakeImp == false && isImposter == 0) || fakeImp == true) fakeImp = setIsImposter;
-            player?.WriteMemory_Impostor(Convert.ToByte(setIsImposter));
+            player?.Set_Impostor(Convert.ToByte(setIsImposter));
 
-            IntPtr killTimerPtr = Utils.GetMemberPointer(player.offset_ptr, typeof(PlayerControl), "killTimer");
+            IntPtr killTimerPtr = Utils.GetMemberPointer(player.playerControlPtr, typeof(PlayerControl), "killTimer");
             if (fakeImp) Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "60.0");
             else Main.mem.UnfreezeValue(killTimerPtr.GetAddress());
         }
@@ -105,7 +105,7 @@ namespace Cheat
 
         public static int RunCommand(string input)
         {
-            PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
+            Player player = playerDatas.Find((p) => p.IsLocalPlayer);
 
             string[] playerCommands = new string[] { "dead", "alive", "imposter", "crewmate", "fullbright", "nofullbright" };
             if (player == null && playerCommands.Contains(input))
@@ -133,11 +133,11 @@ namespace Cheat
 
                 // Local player-required commands
                 case "dead":
-                    player?.WriteMemory_IsDead(Convert.ToByte(true));
+                    player?.Set_IsDead(Convert.ToByte(true));
                     Console.WriteLine(input + " -> ok");
                     break;
                 case "alive":
-                    player?.WriteMemory_IsDead(Convert.ToByte(false));
+                    player?.Set_IsDead(Convert.ToByte(false));
                     Console.WriteLine(input + " -> ok");
                     break;
                 case "imposter":
@@ -158,6 +158,8 @@ namespace Cheat
                     Main.mem.UnfreezeValue(lightSourcePtr2.GetAddress());
                     Console.WriteLine(input + " -> ok");
                     break;
+                case "test":
+                    break;
             }
             return 0;
         }
@@ -165,7 +167,7 @@ namespace Cheat
         public static int SetKillCoolDown(float seconds)
         {
             if (fakeImp) return 1;
-            PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
+            Player player = playerDatas.Find((p) => p.IsLocalPlayer);
             if (player == null)
             {
                 Reset();
@@ -173,14 +175,14 @@ namespace Cheat
                 if (player == null)
                     return -1;
             }
-            IntPtr killTimerPtr = Utils.GetMemberPointer(player.offset_ptr, typeof(PlayerControl), "killTimer");
+            IntPtr killTimerPtr = Utils.GetMemberPointer(player.playerControlPtr, typeof(PlayerControl), "killTimer");
             Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", seconds.ToString("0.0"));
             return 0;
         }
 
         public static int SetBrightness(float brightness)
         {
-            PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
+            Player player = playerDatas.Find((p) => p.IsLocalPlayer);
             if (player == null)
             {
                 Reset();
