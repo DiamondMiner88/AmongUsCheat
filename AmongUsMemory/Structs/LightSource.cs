@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 [StructLayout(LayoutKind.Explicit)]
 public struct LightSource
 {
-    [FieldOffset(8)] public uint m_CachedPtr;
+    [FieldOffset(0x08)] public uint m_CachedPtr;
     [FieldOffset(12)] public IntPtr child;
     [FieldOffset(16)] public IntPtr requiredDels;
     [FieldOffset(20)] public IntPtr myMesh;
     [FieldOffset(24)] public uint MinRays;
-    [FieldOffset(28)] public float LightRadius;
+    [FieldOffset(0x1c)] public float LightRadius;
     [FieldOffset(32)] public IntPtr Material;
     [FieldOffset(36)] public IntPtr verts;
     [FieldOffset(40)] public uint vertCount;

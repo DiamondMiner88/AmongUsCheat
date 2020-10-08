@@ -49,28 +49,18 @@ namespace Cheat
 
             AmongUsMemory.Player player = playerDatas.Find((p) => p.IsLocalPlayer);
 
-            if (player != null)
-            {
-                player.Set_SetNameTextColor(new Color(0, 255, 0, 1));
-
-
-
-                if (fakeImp)
-                {
-                    IntPtr killTimerPtr = AmongUsMemory.Utils.GetMemberPointer(player.PlayerControlOffsetPtr, typeof(PlayerControl), "killTimer");
-                    AmongUsMemory.Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "0.0");
-                }
-            }
-
-            playerDatas.FindAll((p) => p.PlayerInfo?.IsImpostor == 1).ForEach((p) => p.Set_SetNameTextColor(new Color(255, 0, 0, 1)));
+            RunCommand("nofullbright");
+            RunCommand("nohighlight");
+            RunCommand("enablecooldown");
+            // turn off the gui elements too
 
             Console.WriteLine("Reset");
         }
 
         public static void Update()
         {
-            AmongUsMemory.Player player = playerDatas.Find((p) => p.IsLocalPlayer);
-            if (player == null) return;
+            //AmongUsMemory.Player player = playerDatas.Find((p) => p.IsLocalPlayer);
+            //if (player == null) return;
             //Console.WriteLine(player.Position.x + "f, " + player.Position.y + "f");
         }
 
@@ -78,7 +68,7 @@ namespace Cheat
         {
             Player player = playerDatas.Find((p) => p.IsLocalPlayer);
 
-            string[] playerCommands = new string[] { "dead", "alive", "imposter", "crewmate", "fullbright", "nofullbright" };
+            string[] playerCommands = new string[] { "dead", "alive", "imposter", "crewmate", "fullbright", "nofullbright", "highlightimposters", "nohighlight" };
             if (player == null && playerCommands.Contains(input))
             {
                 Reset();
@@ -89,6 +79,8 @@ namespace Cheat
                     return -1;
                 }
             }
+
+            IntPtr lightSourcePtr = Utils.GetMemberPointer(player.Instance.myLight, typeof(LightSource), "LightRadius");
 
             switch (input)
             {
@@ -102,7 +94,6 @@ namespace Cheat
                     Program.Exit();
                     break;
 
-                // Local player-required commands
                 case "dead":
                     player?.Set_IsDead(Convert.ToByte(true));
                     Console.WriteLine(input + " -> ok");
@@ -120,14 +111,34 @@ namespace Cheat
                     Console.WriteLine(input + " -> ok");
                     break;
                 case "fullbright":
-                    IntPtr lightSourcePtr = Utils.GetMemberPointer(player.Instance.myLight, typeof(LightSource), "LightRadius");
-                    Main.mem.FreezeValue(lightSourcePtr.GetAddress(), "float", "1000.0");
+                    Main.mem.FreezeValue(lightSourcePtr.GetAddress(), "float", "2000.0");
                     Console.WriteLine(input + " -> ok");
                     break;
                 case "nofullbright":
-                    IntPtr lightSourcePtr2 = Utils.GetMemberPointer(player.Instance.myLight, typeof(LightSource), "LightRadius");
-                    Main.mem.UnfreezeValue(lightSourcePtr2.GetAddress());
+                    Main.mem.UnfreezeValue(lightSourcePtr.GetAddress());
                     Console.WriteLine(input + " -> ok");
+                    break;
+                case "highlightimposters":
+                    playerDatas.FindAll((p) => p.PlayerInfo?.IsImpostor == 1).ForEach((p) => p.Set_SetNameTextColor(new Color(255, 0, 0, 1)));
+                    Console.WriteLine(input + " -> ok");
+                    break;
+                case "nohighlight":
+                    playerDatas.ForEach((p) => p.Set_SetNameTextColor(new Color(255, 255, 255, 1)));
+                    Console.WriteLine(input + " -> ok");
+                    break;
+                case "disablecooldown":
+                    if (!fakeImp)
+                    {
+                        IntPtr killTimerPtr = AmongUsMemory.Utils.GetMemberPointer(player.PlayerControlOffsetPtr, typeof(PlayerControl), "killTimer");
+                        AmongUsMemory.Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "0.0");
+                    }
+                    break;
+                case "enablecooldown":
+                    if (!fakeImp)
+                    {
+                        IntPtr killTimerPtr = AmongUsMemory.Utils.GetMemberPointer(player.PlayerControlOffsetPtr, typeof(PlayerControl), "killTimer");
+                        AmongUsMemory.Main.mem.UnfreezeValue(killTimerPtr.GetAddress());
+                    }
                     break;
                 case "test":
                     AmongUsMemory.GetObjects.GetAmongUsClient();

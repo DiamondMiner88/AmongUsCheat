@@ -24,32 +24,78 @@
         /// </summary>
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HackGUI));
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.statusLabel = new System.Windows.Forms.Label();
-            this.SetDead = new System.Windows.Forms.RadioButton();
-            this.SetAlive = new System.Windows.Forms.RadioButton();
-            this.SetImposter = new System.Windows.Forms.RadioButton();
-            this.playerStatusLabel = new System.Windows.Forms.Label();
-            this.SetCrewmate = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.SetVisionNormal = new System.Windows.Forms.RadioButton();
-            this.visionLabel = new System.Windows.Forms.Label();
-            this.SetVisionFull = new System.Windows.Forms.RadioButton();
-            this.groupBox1.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.checkbox_instaKill = new System.Windows.Forms.CheckBox();
+            this.button_reset = new System.Windows.Forms.Button();
+            this.checkbox_imposter = new System.Windows.Forms.CheckBox();
+            this.checkbox_dead = new System.Windows.Forms.CheckBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkbox_showConsole = new System.Windows.Forms.CheckBox();
+            this.checkbox_highlightImposters = new System.Windows.Forms.CheckBox();
             this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.checkbox_highlightImposters);
+            this.groupBox2.Controls.Add(this.checkbox_showConsole);
+            this.groupBox2.Controls.Add(this.checkbox_instaKill);
+            this.groupBox2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox2.Location = new System.Drawing.Point(119, 12);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(113, 164);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Abilities";
+            // 
+            // checkbox_instaKill
+            // 
+            this.checkbox_instaKill.AutoSize = true;
+            this.checkbox_instaKill.Location = new System.Drawing.Point(6, 16);
+            this.checkbox_instaKill.Name = "checkbox_instaKill";
+            this.checkbox_instaKill.Size = new System.Drawing.Size(65, 17);
+            this.checkbox_instaKill.TabIndex = 2;
+            this.checkbox_instaKill.Text = "Insta-Kill";
+            this.checkbox_instaKill.UseVisualStyleBackColor = true;
+            this.checkbox_instaKill.CheckedChanged += new System.EventHandler(this.checkbox_instaKill_CheckedChanged);
+            // 
+            // button_reset
+            // 
+            this.button_reset.ForeColor = System.Drawing.Color.White;
+            this.button_reset.Location = new System.Drawing.Point(12, 182);
+            this.button_reset.Name = "button_reset";
+            this.button_reset.Size = new System.Drawing.Size(220, 23);
+            this.button_reset.TabIndex = 7;
+            this.button_reset.Text = "Sync Players/Reset/New Game";
+            this.button_reset.UseVisualStyleBackColor = true;
+            this.button_reset.Click += new System.EventHandler(this.button_reset_Click);
+            // 
+            // checkbox_imposter
+            // 
+            this.checkbox_imposter.AutoSize = true;
+            this.checkbox_imposter.Location = new System.Drawing.Point(6, 16);
+            this.checkbox_imposter.Name = "checkbox_imposter";
+            this.checkbox_imposter.Size = new System.Drawing.Size(66, 17);
+            this.checkbox_imposter.TabIndex = 8;
+            this.checkbox_imposter.Text = "Imposter";
+            this.checkbox_imposter.UseVisualStyleBackColor = true;
+            // 
+            // checkbox_dead
+            // 
+            this.checkbox_dead.AutoSize = true;
+            this.checkbox_dead.Location = new System.Drawing.Point(6, 39);
+            this.checkbox_dead.Name = "checkbox_dead";
+            this.checkbox_dead.Size = new System.Drawing.Size(52, 17);
+            this.checkbox_dead.TabIndex = 9;
+            this.checkbox_dead.Text = "Dead";
+            this.checkbox_dead.UseVisualStyleBackColor = true;
+            this.checkbox_dead.CheckedChanged += new System.EventHandler(this.checkbox_dead_CheckedChanged);
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.panel1);
-            this.groupBox1.Controls.Add(this.SetImposter);
-            this.groupBox1.Controls.Add(this.playerStatusLabel);
-            this.groupBox1.Controls.Add(this.SetCrewmate);
+            this.groupBox1.Controls.Add(this.checkbox_dead);
+            this.groupBox1.Controls.Add(this.checkbox_imposter);
             this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
@@ -58,148 +104,27 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Roles";
             // 
-            // panel1
+            // checkbox_showConsole
             // 
-            this.panel1.BackColor = System.Drawing.Color.Transparent;
-            this.panel1.Controls.Add(this.statusLabel);
-            this.panel1.Controls.Add(this.SetDead);
-            this.panel1.Controls.Add(this.SetAlive);
-            this.panel1.Location = new System.Drawing.Point(0, 76);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(101, 82);
-            this.panel1.TabIndex = 7;
+            this.checkbox_showConsole.AutoSize = true;
+            this.checkbox_showConsole.Location = new System.Drawing.Point(6, 141);
+            this.checkbox_showConsole.Name = "checkbox_showConsole";
+            this.checkbox_showConsole.Size = new System.Drawing.Size(94, 17);
+            this.checkbox_showConsole.TabIndex = 3;
+            this.checkbox_showConsole.Text = "Show Console";
+            this.checkbox_showConsole.UseVisualStyleBackColor = true;
+            this.checkbox_showConsole.CheckedChanged += new System.EventHandler(this.checkbox_showConsole_CheckedChanged);
             // 
-            // statusLabel
+            // checkbox_highlightImposters
             // 
-            this.statusLabel.AutoSize = true;
-            this.statusLabel.Location = new System.Drawing.Point(7, 11);
-            this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(37, 13);
-            this.statusLabel.TabIndex = 3;
-            this.statusLabel.Text = "Status";
-            // 
-            // SetDead
-            // 
-            this.SetDead.AutoSize = true;
-            this.SetDead.Location = new System.Drawing.Point(10, 50);
-            this.SetDead.Name = "SetDead";
-            this.SetDead.Size = new System.Drawing.Size(51, 17);
-            this.SetDead.TabIndex = 5;
-            this.SetDead.TabStop = true;
-            this.SetDead.Text = "Dead";
-            this.SetDead.UseVisualStyleBackColor = true;
-            this.SetDead.CheckedChanged += new System.EventHandler(this.SetDead_CheckedChanged);
-            // 
-            // SetAlive
-            // 
-            this.SetAlive.AutoSize = true;
-            this.SetAlive.Location = new System.Drawing.Point(10, 27);
-            this.SetAlive.Name = "SetAlive";
-            this.SetAlive.Size = new System.Drawing.Size(48, 17);
-            this.SetAlive.TabIndex = 4;
-            this.SetAlive.TabStop = true;
-            this.SetAlive.Text = "Alive";
-            this.SetAlive.UseVisualStyleBackColor = true;
-            this.SetAlive.CheckedChanged += new System.EventHandler(this.SetAlive_CheckedChanged);
-            // 
-            // SetImposter
-            // 
-            this.SetImposter.AutoSize = true;
-            this.SetImposter.Location = new System.Drawing.Point(10, 59);
-            this.SetImposter.Name = "SetImposter";
-            this.SetImposter.Size = new System.Drawing.Size(65, 17);
-            this.SetImposter.TabIndex = 2;
-            this.SetImposter.TabStop = true;
-            this.SetImposter.Text = "Imposter";
-            this.SetImposter.UseVisualStyleBackColor = true;
-            this.SetImposter.CheckedChanged += new System.EventHandler(this.SetImposter_CheckedChanged);
-            // 
-            // playerStatusLabel
-            // 
-            this.playerStatusLabel.AutoSize = true;
-            this.playerStatusLabel.Location = new System.Drawing.Point(7, 20);
-            this.playerStatusLabel.Name = "playerStatusLabel";
-            this.playerStatusLabel.Size = new System.Drawing.Size(69, 13);
-            this.playerStatusLabel.TabIndex = 1;
-            this.playerStatusLabel.Text = "Player Status";
-            // 
-            // SetCrewmate
-            // 
-            this.SetCrewmate.AutoSize = true;
-            this.SetCrewmate.Location = new System.Drawing.Point(10, 36);
-            this.SetCrewmate.Name = "SetCrewmate";
-            this.SetCrewmate.Size = new System.Drawing.Size(72, 17);
-            this.SetCrewmate.TabIndex = 0;
-            this.SetCrewmate.TabStop = true;
-            this.SetCrewmate.Text = "Crewmate";
-            this.SetCrewmate.UseVisualStyleBackColor = true;
-            this.SetCrewmate.CheckedChanged += new System.EventHandler(this.SetCrewmate_CheckedChanged);
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.groupBox2.Location = new System.Drawing.Point(134, 12);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(98, 76);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Imposter";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 23);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Insta-kill";
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.SetVisionNormal);
-            this.groupBox3.Controls.Add(this.visionLabel);
-            this.groupBox3.Controls.Add(this.SetVisionFull);
-            this.groupBox3.ForeColor = System.Drawing.Color.White;
-            this.groupBox3.Location = new System.Drawing.Point(134, 94);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(98, 82);
-            this.groupBox3.TabIndex = 6;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Crewmate";
-            // 
-            // SetVisionNormal
-            // 
-            this.SetVisionNormal.AutoSize = true;
-            this.SetVisionNormal.Location = new System.Drawing.Point(12, 59);
-            this.SetVisionNormal.Name = "SetVisionNormal";
-            this.SetVisionNormal.Size = new System.Drawing.Size(61, 17);
-            this.SetVisionNormal.TabIndex = 2;
-            this.SetVisionNormal.TabStop = true;
-            this.SetVisionNormal.Text = "Normal ";
-            this.SetVisionNormal.UseVisualStyleBackColor = true;
-            this.SetVisionNormal.CheckedChanged += new System.EventHandler(this.SetVisionNormal_CheckedChanged);
-            // 
-            // visionLabel
-            // 
-            this.visionLabel.AutoSize = true;
-            this.visionLabel.Location = new System.Drawing.Point(9, 20);
-            this.visionLabel.Name = "visionLabel";
-            this.visionLabel.Size = new System.Drawing.Size(35, 13);
-            this.visionLabel.TabIndex = 1;
-            this.visionLabel.Text = "Vision";
-            // 
-            // SetVisionFull
-            // 
-            this.SetVisionFull.AutoSize = true;
-            this.SetVisionFull.Location = new System.Drawing.Point(12, 36);
-            this.SetVisionFull.Name = "SetVisionFull";
-            this.SetVisionFull.Size = new System.Drawing.Size(41, 17);
-            this.SetVisionFull.TabIndex = 0;
-            this.SetVisionFull.TabStop = true;
-            this.SetVisionFull.Text = "Full";
-            this.SetVisionFull.UseVisualStyleBackColor = true;
-            this.SetVisionFull.CheckedChanged += new System.EventHandler(this.SetVisionFull_CheckedChanged);
+            this.checkbox_highlightImposters.AutoSize = true;
+            this.checkbox_highlightImposters.Location = new System.Drawing.Point(6, 39);
+            this.checkbox_highlightImposters.Name = "checkbox_highlightImposters";
+            this.checkbox_highlightImposters.Size = new System.Drawing.Size(100, 17);
+            this.checkbox_highlightImposters.TabIndex = 4;
+            this.checkbox_highlightImposters.Text = "Red Name Imp.";
+            this.checkbox_highlightImposters.UseVisualStyleBackColor = true;
+            this.checkbox_highlightImposters.CheckedChanged += new System.EventHandler(this.checkbox_highlightImposters_CheckedChanged);
             // 
             // HackGUI
             // 
@@ -207,42 +132,31 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(245, 192);
-            this.Controls.Add(this.groupBox3);
+            this.ClientSize = new System.Drawing.Size(245, 216);
+            this.Controls.Add(this.button_reset);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "HackGUI";
-            this.Text = "I\'m Among Us | Among Us Hacks";
+            this.Text = "I\'m Among Them";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.HackGUI_Closed);
             this.Load += new System.EventHandler(this.HackGUI_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label playerStatusLabel;
-        private System.Windows.Forms.RadioButton SetCrewmate;
-        private System.Windows.Forms.RadioButton SetImposter;
-        private System.Windows.Forms.RadioButton SetDead;
-        private System.Windows.Forms.RadioButton SetAlive;
-        private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label visionLabel;
-        private System.Windows.Forms.RadioButton SetVisionFull;
-        private System.Windows.Forms.RadioButton SetVisionNormal;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.CheckBox checkbox_instaKill;
+        private System.Windows.Forms.Button button_reset;
+        private System.Windows.Forms.CheckBox checkbox_imposter;
+        private System.Windows.Forms.CheckBox checkbox_dead;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox checkbox_showConsole;
+        private System.Windows.Forms.CheckBox checkbox_highlightImposters;
     }
 }

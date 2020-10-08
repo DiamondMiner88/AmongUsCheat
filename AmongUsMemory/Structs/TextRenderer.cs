@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-[System.Runtime.InteropServices.StructLayout(LayoutKind.Explicit)]
+[StructLayout(LayoutKind.Explicit)]
 public struct TextRenderer
 {
     [FieldOffset(0x10)] public float scale;

@@ -5,70 +5,45 @@ namespace Cheat
 {
     public partial class HackGUI : Form
     {
+        public bool isOpen = false;
+
         public HackGUI()
         {
             InitializeComponent();
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            panel1.BorderStyle = BorderStyle.None;
             TopMost = true;
             MinimizeBox = true;
             MaximizeBox = false;
         }
-
-        private void HackGUI_Load(object sender, EventArgs e)
+        private void HackGUI_Load(object sender, EventArgs e) =>
+            isOpen = true;
+        private void HackGUI_Closed(object sender, FormClosedEventArgs e)
         {
-            // set default values if any
-        }
-
-        private void HackGUI_Closed(object sender, FormClosedEventArgs e) =>
+            isOpen = false;
             Program.Exit();
+        }
+        private void button_reset_Click(object sender, EventArgs e) =>
+            Memory.RunCommand("reset");
 
-        private void SetVisionFull_CheckedChanged(object sender, EventArgs e)
+        private void checkbox_instaKill_CheckedChanged(object sender, EventArgs e)
         {
-            RadioButton radioButton = sender as RadioButton;
-            if (!radioButton.Checked) return;
-
-            Memory.RunCommand("fullbright");
+            if ((sender as CheckBox).Checked) Memory.RunCommand("disablecooldown");
+            else Memory.RunCommand("enablecooldown");
         }
 
-        private void SetVisionNormal_CheckedChanged(object sender, EventArgs e)
+        private void checkbox_dead_CheckedChanged(object sender, EventArgs e)
         {
-            RadioButton radioButton = sender as RadioButton;
-            if (!radioButton.Checked) return;
-
-            Memory.RunCommand("nofullbright");
+            if ((sender as CheckBox).Checked) Memory.RunCommand("dead");
+            else Memory.RunCommand("alive");
         }
 
-        private void SetAlive_CheckedChanged(object sender, EventArgs e)
+        private void checkbox_showConsole_CheckedChanged(object sender, EventArgs e) =>
+            Program.DisplayConsole((sender as CheckBox).Checked);
+
+        private void checkbox_highlightImposters_CheckedChanged(object sender, EventArgs e)
         {
-            RadioButton radioButton = sender as RadioButton;
-            if (!radioButton.Checked) return;
-
-            Memory.RunCommand("alive");
-        }
-
-        private void SetDead_CheckedChanged(object sender, EventArgs e)
-        {
-            RadioButton radioButton = sender as RadioButton;
-            if (!radioButton.Checked) return;
-
-            Memory.RunCommand("dead");
-        }
-
-        private void SetCrewmate_CheckedChanged(object sender, EventArgs e)
-        {
-            RadioButton radioButton = sender as RadioButton;
-            if (!radioButton.Checked) return;
-
-            Memory.RunCommand("crewmate");
-        }
-
-        private void SetImposter_CheckedChanged(object sender, EventArgs e)
-        {
-            RadioButton radioButton = sender as RadioButton;
-            if (!radioButton.Checked) return;
-
-            Memory.RunCommand("imposter");
+            if ((sender as CheckBox).Checked) Memory.RunCommand("highlightimposters");
+            else Memory.RunCommand("nohighlight");
         }
     }
 }
