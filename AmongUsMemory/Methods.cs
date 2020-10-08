@@ -1,7 +1,9 @@
 ﻿
-using AmongUsMemory;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace AmongUsMemory
 {
@@ -19,7 +21,7 @@ namespace AmongUsMemory
         {
             if (PlayerControl_GetDataPTR == IntPtr.Zero)
             {
-                var aobScan = Main.mem.AoBScan(Pattern.PlayerControl_GetData);
+                Task<IEnumerable<long>> aobScan = Main.mem.AoBScan(Pattern.PlayerControl_GetData);
                 aobScan.Wait();
                 if (aobScan.Result.Count() == 1)
                     PlayerControl_GetDataPTR = (IntPtr)aobScan.Result.First();
@@ -31,19 +33,20 @@ namespace AmongUsMemory
         {
             if (PlayerControl_GetDataPTR != IntPtr.Zero)
             {
-                var ptr = PlayerControl_GetDataPTR;
-                var playerInfoAddress = Main.ProcessMemory.CallFunction(ptr, playerInfoPtr);
+                IntPtr ptr = PlayerControl_GetDataPTR;
+                int playerInfoAddress = Main.ProcessMemory.CallFunction(ptr, playerInfoPtr);
                 return playerInfoAddress;
             }
             return -1;
         }
+
         public static void Init()
         {
-            var methods = typeof(Methods).GetMethods();
-            foreach (var m in methods)
+            MethodInfo[] methods = typeof(Methods).GetMethods();
+            foreach (MethodInfo m in methods)
             {
-                var atts = m.GetCustomAttributes(true);
-                foreach (var att in atts)
+                object[] atts = m.GetCustomAttributes(true);
+                foreach (object att in atts)
                     if (att.GetType() == typeof(InitAttribute))
                         m.Invoke(null, null);
             }

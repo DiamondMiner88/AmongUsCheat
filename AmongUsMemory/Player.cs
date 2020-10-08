@@ -10,11 +10,11 @@ namespace AmongUsMemory
         public IntPtr PlayerControl_GetData_Offset = IntPtr.Zero;
         public PlayerControl Instance;
 
-        public IntPtr playerInfoOffsetPtr;
-        private string playerInfoOffset;
+        public IntPtr PlayerInfoOffsetPtr;
+        private string PlayerInfoOffset;
 
-        public IntPtr playerControlPtr;
-        public string playerControlOffset;
+        public IntPtr PlayerControlOffsetPtr;
+        public string PlayerControlOffset;
 
 
         #region ObserveState
@@ -75,16 +75,16 @@ namespace AmongUsMemory
         {
             get
             {
-                if (playerInfoOffsetPtr == IntPtr.Zero)
+                if (PlayerInfoOffsetPtr == IntPtr.Zero)
                 {
-                    int ptr = Methods.Call_PlayerControl_GetData(this.playerControlPtr);
-                    playerInfoOffset = ptr.GetAddress();
-                    PlayerInfo pInfo = Utils.FromBytes<PlayerInfo>(Main.mem.ReadBytes(playerInfoOffset, Utils.SizeOf<PlayerInfo>()));
-                    playerInfoOffsetPtr = new IntPtr(ptr);
+                    int ptr = Methods.Call_PlayerControl_GetData(this.PlayerControlOffsetPtr);
+                    PlayerInfoOffset = ptr.GetAddress();
+                    PlayerInfo pInfo = Utils.FromBytes<PlayerInfo>(Main.mem.ReadBytes(PlayerInfoOffset, Utils.SizeOf<PlayerInfo>()));
+                    PlayerInfoOffsetPtr = new IntPtr(ptr);
                     return pInfo;
                 }
                 else
-                    return Utils.FromBytes<PlayerInfo>(Main.mem.ReadBytes(playerInfoOffset, Utils.SizeOf<PlayerInfo>()));
+                    return Utils.FromBytes<PlayerInfo>(Main.mem.ReadBytes(PlayerInfoOffset, Utils.SizeOf<PlayerInfo>()));
             }
         }
 
@@ -118,25 +118,25 @@ namespace AmongUsMemory
         #region WriteMemory
         public void Set_LightRange(float value)
         {
-            var targetPointer = Utils.GetMemberPointer(Instance.myLight, typeof(LightSource), "LightRadius");
+            IntPtr targetPointer = Utils.GetMemberPointer(Instance.myLight, typeof(LightSource), "LightRadius");
             Main.mem.WriteMemory(targetPointer.GetAddress(), "float", value.ToString("0.0"));
         }
 
         public void Set_Impostor(byte value)
         {
-            var targetPointer = Utils.GetMemberPointer(playerInfoOffsetPtr, typeof(PlayerInfo), "IsImpostor");
+            IntPtr targetPointer = Utils.GetMemberPointer(PlayerInfoOffsetPtr, typeof(PlayerInfo), "IsImpostor");
             Main.mem.WriteMemory(targetPointer.GetAddress(), "byte", value.ToString());
         }
 
         public void Set_IsDead(byte value)
         {
-            var targetPointer = Utils.GetMemberPointer(playerInfoOffsetPtr, typeof(PlayerInfo), "IsDead");
+            IntPtr targetPointer = Utils.GetMemberPointer(PlayerInfoOffsetPtr, typeof(PlayerInfo), "IsDead");
             Main.mem.WriteMemory(targetPointer.GetAddress(), "byte", value.ToString());
         }
 
         public void Set_KillTimer(float value)
         {
-            var targetPointer = Utils.GetMemberPointer(playerControlPtr, typeof(PlayerControl), "killTimer");
+            IntPtr targetPointer = Utils.GetMemberPointer(PlayerControlOffsetPtr, typeof(PlayerControl), "killTimer");
             Main.mem.WriteMemory(targetPointer.GetAddress(), "float", value.ToString());
         }
 
@@ -152,7 +152,7 @@ namespace AmongUsMemory
 
         // whats the point of this? 0 references
         public void ReadMemory() =>
-            Instance = Utils.FromBytes<PlayerControl>(Main.mem.ReadBytes(playerControlOffset, Utils.SizeOf<PlayerControl>()));
+            Instance = Utils.FromBytes<PlayerControl>(Main.mem.ReadBytes(PlayerControlOffset, Utils.SizeOf<PlayerControl>()));
 
         #region GetPosition
         public Vector2 GetSyncPosition()
@@ -161,18 +161,15 @@ namespace AmongUsMemory
             {
                 int _offset_vec2_position = 60;
                 int _offset_vec2_sizeOf = 8;
-                var netTransform = ((int)Instance.NetTransform + _offset_vec2_position).ToString("X");
-                var vec2Data = Main.mem.ReadBytes($"{netTransform}", _offset_vec2_sizeOf); // Read 8 bytes from address  
+                string netTransform = ((int)Instance.NetTransform + _offset_vec2_position).ToString("X");
+                byte[] vec2Data = Main.mem.ReadBytes($"{netTransform}", _offset_vec2_sizeOf); // Read 8 bytes from address  
                 if (vec2Data != null && vec2Data.Length != 0)
                 {
-                    var vec2 = Utils.FromBytes<Vector2>(vec2Data);
-                    return vec2;
+                    return Utils.FromBytes<Vector2>(vec2Data);
                 }
                 else
                     return Vector2.Zero;
             }
-
-
             catch (Exception e)
             {
                 Console.WriteLine(e);

@@ -51,7 +51,7 @@ namespace Cheat
 
             if (fakeImp != true && player != null)
             {
-                IntPtr killTimerPtr = AmongUsMemory.Utils.GetMemberPointer(player.playerControlPtr, typeof(PlayerControl), "killTimer");
+                IntPtr killTimerPtr = AmongUsMemory.Utils.GetMemberPointer(player.PlayerControlOffsetPtr, typeof(PlayerControl), "killTimer");
                 AmongUsMemory.Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "0.0");
             }
 
@@ -131,12 +131,12 @@ namespace Cheat
         private static void SetImposter(AmongUsMemory.Player player, bool setIsImposter)
         {
             // keep track if the player is fake impostering to prevent killing while crewmate which doesnt actually register
-            IntPtr isImposterPtr = Utils.GetMemberPointer(player.playerInfoOffsetPtr, typeof(PlayerInfo), "IsImpostor");
+            IntPtr isImposterPtr = Utils.GetMemberPointer(player.PlayerInfoOffsetPtr, typeof(PlayerInfo), "IsImpostor");
             int isImposter = Main.mem.ReadByte(isImposterPtr.GetAddress());
             if ((fakeImp == false && isImposter == 0) || fakeImp == true) fakeImp = setIsImposter;
             player?.Set_Impostor(Convert.ToByte(setIsImposter));
 
-            IntPtr killTimerPtr = Utils.GetMemberPointer(player.playerControlPtr, typeof(PlayerControl), "killTimer");
+            IntPtr killTimerPtr = Utils.GetMemberPointer(player.PlayerControlOffsetPtr, typeof(PlayerControl), "killTimer");
             if (fakeImp) Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "60.0");
             else Main.mem.UnfreezeValue(killTimerPtr.GetAddress());
         }
@@ -152,7 +152,7 @@ namespace Cheat
                 if (player == null)
                     return -1;
             }
-            IntPtr killTimerPtr = Utils.GetMemberPointer(player.playerControlPtr, typeof(PlayerControl), "killTimer");
+            IntPtr killTimerPtr = Utils.GetMemberPointer(player.PlayerControlOffsetPtr, typeof(PlayerControl), "killTimer");
             Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", seconds.ToString("0.0"));
             return 0;
         }

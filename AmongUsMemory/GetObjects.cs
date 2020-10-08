@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AmongUsMemory
 {
@@ -11,7 +12,7 @@ namespace AmongUsMemory
 
             byte[] playerAoB = Main.mem.ReadBytes(Pattern.PlayerControl_Pointer, Utils.SizeOf<PlayerControl>());
             string aobData = Main.MakeAobString(playerAoB, 4, "?? ?? ?? ??");
-            var aobResult = Main.mem.AoBScan(aobData, true, true);
+            Task<IEnumerable<long>> aobResult = Main.mem.AoBScan(aobData, true, true);
             aobResult.Wait();
 
             IEnumerable<long> results = aobResult.Result;
@@ -25,8 +26,8 @@ namespace AmongUsMemory
                     newPlayers.Add(new Player()
                     {
                         Instance = PlayerControl,
-                        playerControlOffset = inst.GetAddress(),
-                        playerControlPtr = new IntPtr((int)inst)
+                        PlayerControlOffset = inst.GetAddress(),
+                        PlayerControlOffsetPtr = new IntPtr((int)inst)
                     });
                 }
             }
@@ -37,10 +38,10 @@ namespace AmongUsMemory
         {
             ShipStatus shipStatus = new ShipStatus();
             byte[] shipAob = Main.mem.ReadBytes(Pattern.ShipStatus_Pointer, Utils.SizeOf<ShipStatus>());
-            var aobStr = Main.MakeAobString(shipAob, 4, "00 00 00 00 ?? ?? ?? ??");
-            var aobResults = Main.mem.AoBScan(aobStr, true, true);
+            string aobStr = Main.MakeAobString(shipAob, 4, "00 00 00 00 ?? ?? ?? ??");
+            Task<IEnumerable<long>> aobResults = Main.mem.AoBScan(aobStr, true, true);
             aobResults.Wait();
-            foreach (var result in aobResults.Result)
+            foreach (long result in aobResults.Result)
             {
                 byte[] resultByte = Main.mem.ReadBytes(result.GetAddress(), Utils.SizeOf<ShipStatus>());
                 ShipStatus resultInst = Utils.FromBytes<ShipStatus>(resultByte);
@@ -57,9 +58,9 @@ namespace AmongUsMemory
             AmongUsClient client = new AmongUsClient();
             byte[] clientAob = AmongUsMemory.Main.mem.ReadBytes(Pattern.AmongusClient_Pointer, Utils.SizeOf<AmongUsClient>());
             string aobStr = AmongUsMemory.Main.MakeAobString(clientAob, 4, "?? ?? ?? ??");
-            var aobResults = AmongUsMemory.Main.mem.AoBScan(aobStr, true, true);
+            Task<IEnumerable<long>> aobResults = AmongUsMemory.Main.mem.AoBScan(aobStr, true, true);
             aobResults.Wait();
-            foreach (var result in aobResults.Result)
+            foreach (long result in aobResults.Result)
             {
                 byte[] resultByte = AmongUsMemory.Main.mem.ReadBytes(result.GetAddress(), Utils.SizeOf<AmongUsClient>());
                 AmongUsClient resultInst = Utils.FromBytes<AmongUsClient>(resultByte);

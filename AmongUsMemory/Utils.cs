@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using System.Reflection;
 
 namespace AmongUsMemory
 {
@@ -13,17 +14,15 @@ namespace AmongUsMemory
         public static T FromBytes<T>(byte[] bytes)
         {
             GCHandle gcHandle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
-            var data = (T)Marshal.PtrToStructure(gcHandle.AddrOfPinnedObject(), typeof(T));
+            T data = (T)Marshal.PtrToStructure(gcHandle.AddrOfPinnedObject(), typeof(T));
             gcHandle.Free();
             return data;
         }
 
         public static int SizeOf<T>()
         {
-            var size = Marshal.SizeOf(typeof(T));
-            return size;
+            return Marshal.SizeOf(typeof(T));
         }
-
 
         public static string GetAddress(this long value) { return value.ToString("X"); }
         public static string GetAddress(this int value) { return value.ToString("X"); }
@@ -39,7 +38,7 @@ namespace AmongUsMemory
 
         public static IntPtr GetMemberPointer(IntPtr basePtr, Type type, string fieldName)
         {
-            var offset = GetOffset(type, fieldName); 
+            int offset = GetOffset(type, fieldName); 
             return basePtr.Sum(offset);
         }
         public static int GetOffset(Type type, string fieldName)
@@ -48,9 +47,9 @@ namespace AmongUsMemory
             {
                 return _offsetMap[(type, fieldName)];
             }
-            var field = type.GetField(fieldName);
-            var atts = field.GetCustomAttributes(true);
-            foreach (var att in atts)
+            FieldInfo field = type.GetField(fieldName);
+            object[] atts = field.GetCustomAttributes(true);
+            foreach (object att in atts)
             {
                 if (att.GetType() == typeof(FieldOffsetAttribute))
                 {
@@ -68,13 +67,13 @@ namespace AmongUsMemory
         public static string ReadString(IntPtr offset)
         {
             //string pointer + 8 = length
-            var length = AmongUsMemory.Main.mem.ReadInt(offset.Sum(8).GetAddress());
+            int length = AmongUsMemory.Main.mem.ReadInt(offset.Sum(8).GetAddress());
 
             //unit of string is 2byte.
-            var format_length = length * 2;
+            int format_length = length * 2;
 
             //string pointer + 12 = value
-            var strByte = AmongUsMemory.Main.mem.ReadBytes(offset.Sum(12).GetAddress(), format_length); 
+            byte[] strByte = AmongUsMemory.Main.mem.ReadBytes(offset.Sum(12).GetAddress(), format_length); 
 
             StringBuilder sb = new StringBuilder(); 
             for (int i = 0; i < strByte.Length; i += 2)

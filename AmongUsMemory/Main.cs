@@ -67,7 +67,7 @@ namespace AmongUsMemory
             // aob pattern
             string aobData = "";
             // read 4byte aob pattern.
-            foreach (var _byte in aobTarget)
+            foreach (byte _byte in aobTarget)
             {
                 if (_byte < 16)
                     aobData += "0" + _byte.ToString("X");
