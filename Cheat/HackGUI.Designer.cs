@@ -34,7 +34,6 @@
             this.SetCrewmate = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.SetKillCooldown = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.SetVisionNormal = new System.Windows.Forms.RadioButton();
             this.visionLabel = new System.Windows.Forms.Label();
@@ -139,7 +138,6 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Controls.Add(this.SetKillCooldown);
             this.groupBox2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.groupBox2.Location = new System.Drawing.Point(134, 12);
             this.groupBox2.Name = "groupBox2";
@@ -153,17 +151,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(6, 23);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 13);
+            this.label1.Size = new System.Drawing.Size(45, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Kill Cooldown: ";
-            // 
-            // SetKillCooldown
-            // 
-            this.SetKillCooldown.Location = new System.Drawing.Point(9, 36);
-            this.SetKillCooldown.Name = "SetKillCooldown";
-            this.SetKillCooldown.Size = new System.Drawing.Size(73, 20);
-            this.SetKillCooldown.TabIndex = 0;
-            this.SetKillCooldown.TextChanged += new System.EventHandler(this.SetKillCooldown_TextChanged);
+            this.label1.Text = "Insta-kill";
             // 
             // groupBox3
             // 
@@ -224,8 +214,8 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "HackGUI";
             this.Text = "I\'m Among Us | Among Us Hacks";
-            this.Load += new System.EventHandler(this.HackGUI_Load);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.HackGUI_Closed);
+            this.Load += new System.EventHandler(this.HackGUI_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -249,7 +239,6 @@
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox SetKillCooldown;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label visionLabel;
         private System.Windows.Forms.RadioButton SetVisionFull;

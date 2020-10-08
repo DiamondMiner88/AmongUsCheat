@@ -23,13 +23,6 @@ namespace Cheat
         private void HackGUI_Closed(object sender, FormClosedEventArgs e) =>
             Program.Exit();
 
-        private void SetKillCooldown_TextChanged(object sender, EventArgs e)
-        {
-            TextBox tb = sender as TextBox;
-            if (float.TryParse(tb.Text, out float newcooldown))
-                Memory.SetKillCoolDown(newcooldown);
-        }
-
         private void SetVisionFull_CheckedChanged(object sender, EventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
