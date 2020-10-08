@@ -25,29 +25,53 @@
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HackGUI));
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.checkbox_highlightImposters = new System.Windows.Forms.CheckBox();
+            this.checkbox_showConsole = new System.Windows.Forms.CheckBox();
             this.checkbox_instaKill = new System.Windows.Forms.CheckBox();
             this.button_reset = new System.Windows.Forms.Button();
             this.checkbox_imposter = new System.Windows.Forms.CheckBox();
             this.checkbox_dead = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.checkbox_showConsole = new System.Windows.Forms.CheckBox();
-            this.checkbox_highlightImposters = new System.Windows.Forms.CheckBox();
+            this.checkbox_fullbright = new System.Windows.Forms.CheckBox();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.checkbox_fullbright);
             this.groupBox2.Controls.Add(this.checkbox_highlightImposters);
             this.groupBox2.Controls.Add(this.checkbox_showConsole);
             this.groupBox2.Controls.Add(this.checkbox_instaKill);
             this.groupBox2.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.groupBox2.Location = new System.Drawing.Point(119, 12);
+            this.groupBox2.Location = new System.Drawing.Point(107, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(113, 164);
+            this.groupBox2.Size = new System.Drawing.Size(125, 164);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Abilities";
+            // 
+            // checkbox_highlightImposters
+            // 
+            this.checkbox_highlightImposters.AutoSize = true;
+            this.checkbox_highlightImposters.Location = new System.Drawing.Point(6, 39);
+            this.checkbox_highlightImposters.Name = "checkbox_highlightImposters";
+            this.checkbox_highlightImposters.Size = new System.Drawing.Size(108, 17);
+            this.checkbox_highlightImposters.TabIndex = 4;
+            this.checkbox_highlightImposters.Text = "Red Name Impst.";
+            this.checkbox_highlightImposters.UseVisualStyleBackColor = true;
+            this.checkbox_highlightImposters.CheckedChanged += new System.EventHandler(this.checkbox_highlightImposters_CheckedChanged);
+            // 
+            // checkbox_showConsole
+            // 
+            this.checkbox_showConsole.AutoSize = true;
+            this.checkbox_showConsole.Location = new System.Drawing.Point(6, 141);
+            this.checkbox_showConsole.Name = "checkbox_showConsole";
+            this.checkbox_showConsole.Size = new System.Drawing.Size(94, 17);
+            this.checkbox_showConsole.TabIndex = 3;
+            this.checkbox_showConsole.Text = "Show Console";
+            this.checkbox_showConsole.UseVisualStyleBackColor = true;
+            this.checkbox_showConsole.CheckedChanged += new System.EventHandler(this.checkbox_showConsole_CheckedChanged);
             // 
             // checkbox_instaKill
             // 
@@ -99,32 +123,21 @@
             this.groupBox1.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(101, 164);
+            this.groupBox1.Size = new System.Drawing.Size(89, 164);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Roles";
             // 
-            // checkbox_showConsole
+            // checkbox_fullbright
             // 
-            this.checkbox_showConsole.AutoSize = true;
-            this.checkbox_showConsole.Location = new System.Drawing.Point(6, 141);
-            this.checkbox_showConsole.Name = "checkbox_showConsole";
-            this.checkbox_showConsole.Size = new System.Drawing.Size(94, 17);
-            this.checkbox_showConsole.TabIndex = 3;
-            this.checkbox_showConsole.Text = "Show Console";
-            this.checkbox_showConsole.UseVisualStyleBackColor = true;
-            this.checkbox_showConsole.CheckedChanged += new System.EventHandler(this.checkbox_showConsole_CheckedChanged);
-            // 
-            // checkbox_highlightImposters
-            // 
-            this.checkbox_highlightImposters.AutoSize = true;
-            this.checkbox_highlightImposters.Location = new System.Drawing.Point(6, 39);
-            this.checkbox_highlightImposters.Name = "checkbox_highlightImposters";
-            this.checkbox_highlightImposters.Size = new System.Drawing.Size(100, 17);
-            this.checkbox_highlightImposters.TabIndex = 4;
-            this.checkbox_highlightImposters.Text = "Red Name Imp.";
-            this.checkbox_highlightImposters.UseVisualStyleBackColor = true;
-            this.checkbox_highlightImposters.CheckedChanged += new System.EventHandler(this.checkbox_highlightImposters_CheckedChanged);
+            this.checkbox_fullbright.AutoSize = true;
+            this.checkbox_fullbright.Location = new System.Drawing.Point(6, 62);
+            this.checkbox_fullbright.Name = "checkbox_fullbright";
+            this.checkbox_fullbright.Size = new System.Drawing.Size(68, 17);
+            this.checkbox_fullbright.TabIndex = 5;
+            this.checkbox_fullbright.Text = "Fullbright";
+            this.checkbox_fullbright.UseVisualStyleBackColor = true;
+            this.checkbox_fullbright.CheckedChanged += new System.EventHandler(this.checkbox_fullbright_CheckedChanged);
             // 
             // HackGUI
             // 
@@ -158,5 +171,6 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox checkbox_showConsole;
         private System.Windows.Forms.CheckBox checkbox_highlightImposters;
+        private System.Windows.Forms.CheckBox checkbox_fullbright;
     }
 }

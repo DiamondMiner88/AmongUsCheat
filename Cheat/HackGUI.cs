@@ -15,13 +15,42 @@ namespace Cheat
             MinimizeBox = true;
             MaximizeBox = false;
         }
+
+        #region Elements
+        public CheckBox element_instaKill
+        {
+            get
+            {
+                return checkbox_instaKill;
+            }
+        }
+
+        public CheckBox element_fullbright
+        {
+            get
+            {
+                return checkbox_fullbright;
+            }
+        }
+
+        public CheckBox element_highlightImposters
+        {
+            get
+            {
+                return checkbox_highlightImposters;
+            }
+        }
+        #endregion
+
         private void HackGUI_Load(object sender, EventArgs e) =>
             isOpen = true;
+
         private void HackGUI_Closed(object sender, FormClosedEventArgs e)
         {
             isOpen = false;
             Program.Exit();
         }
+
         private void button_reset_Click(object sender, EventArgs e) =>
             Memory.RunCommand("reset");
 
@@ -44,6 +73,12 @@ namespace Cheat
         {
             if ((sender as CheckBox).Checked) Memory.RunCommand("highlightimposters");
             else Memory.RunCommand("nohighlight");
+        }
+
+        private void checkbox_fullbright_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as CheckBox).Checked) Memory.RunCommand("fullbright");
+            else Memory.RunCommand("nofullbright");
         }
     }
 }

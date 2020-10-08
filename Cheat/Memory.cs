@@ -49,10 +49,12 @@ namespace Cheat
 
             AmongUsMemory.Player player = playerDatas.Find((p) => p.IsLocalPlayer);
 
-            RunCommand("nofullbright");
-            RunCommand("nohighlight");
             RunCommand("enablecooldown");
-            // turn off the gui elements too
+            Program.hackGUI.element_instaKill.Checked = false;
+            RunCommand("nohighlight");
+            Program.hackGUI.element_highlightImposters.Checked = false;
+            RunCommand("nofullbright");
+            Program.hackGUI.element_fullbright.Checked = false;
 
             Console.WriteLine("Reset");
         }
@@ -79,8 +81,6 @@ namespace Cheat
                     return -1;
                 }
             }
-
-            IntPtr lightSourcePtr = Utils.GetMemberPointer(player.Instance.myLight, typeof(LightSource), "LightRadius");
 
             switch (input)
             {
@@ -111,11 +111,13 @@ namespace Cheat
                     Console.WriteLine(input + " -> ok");
                     break;
                 case "fullbright":
+                    IntPtr lightSourcePtr = Utils.GetMemberPointer(player.Instance.myLight, typeof(LightSource), "LightRadius");
                     Main.mem.FreezeValue(lightSourcePtr.GetAddress(), "float", "2000.0");
                     Console.WriteLine(input + " -> ok");
                     break;
                 case "nofullbright":
-                    Main.mem.UnfreezeValue(lightSourcePtr.GetAddress());
+                    IntPtr lightSourcePtr2 = Utils.GetMemberPointer(player.Instance.myLight, typeof(LightSource), "LightRadius");
+                    Main.mem.UnfreezeValue(lightSourcePtr2.GetAddress());
                     Console.WriteLine(input + " -> ok");
                     break;
                 case "highlightimposters":
@@ -141,7 +143,12 @@ namespace Cheat
                     }
                     break;
                 case "test":
-                    AmongUsMemory.GetObjects.GetAmongUsClient();
+                    //AmongUsMemory.GetObjects.GetAmongUsClient();
+                    IntPtr targetPointer = Utils.GetMemberPointer(player.Instance.nameText, typeof(TextRenderer), "Color");
+                    Console.WriteLine(Main.mem.ReadFloat(targetPointer.GetAddress()));
+                    Console.WriteLine((targetPointer + 4).GetAddress());
+                    Console.WriteLine((targetPointer + 8).GetAddress());
+                    Console.WriteLine((targetPointer + 12).GetAddress());
                     break;
             }
             return 0;
@@ -157,8 +164,17 @@ namespace Cheat
             player?.Set_Impostor(Convert.ToByte(setIsImposter));
 
             IntPtr killTimerPtr = Utils.GetMemberPointer(player.PlayerControlOffsetPtr, typeof(PlayerControl), "killTimer");
-            if (fakeImp) Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "60.0");
-            else Main.mem.UnfreezeValue(killTimerPtr.GetAddress());
+            if (fakeImp)
+            {
+                Program.hackGUI.element_instaKill.Checked = false;
+                Program.hackGUI.element_instaKill.Enabled = false;
+                Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "60.0");
+            }
+            else
+            {
+                Program.hackGUI.element_instaKill.Enabled = true;
+                Main.mem.UnfreezeValue(killTimerPtr.GetAddress());
+            }
         }
 
         public static int SetKillCoolDown(float seconds)
