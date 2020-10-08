@@ -10,36 +10,13 @@ namespace Cheat
     {
         static int UPDATE_DELAY = 500;
 
+        #region States
         static List<AmongUsMemory.Player> playerDatas = new List<AmongUsMemory.Player>();
-        static bool fakeImp;
-
-        // Figure out which scanned 'AmongUsClients' is the actual one used
-        /*
-        public static AmongUsClient GetAmongUsClient()
-        {
-            AmongUsClient client = new AmongUsClient();
-            byte[] clientAob = HamsterCheese.AmongUsMemory.Cheese.mem.ReadBytes(Pattern.AmongusClient_Pointer, Utils.SizeOf<AmongUsClient>());
-            string aobStr = HamsterCheese.AmongUsMemory.Cheese.MakeAobString(clientAob, 4, "?? ?? ?? ??");
-            var aobResults = HamsterCheese.AmongUsMemory.Cheese.mem.AoBScan(aobStr, true, true);
-            aobResults.Wait();
-            foreach (var result in aobResults.Result)
-            {
-                byte[] resultByte = Cheese.mem.ReadBytes(result.GetAddress(), Utils.SizeOf<AmongUsClient>());
-                AmongUsClient resultInst = Utils.FromBytes<AmongUsClient>(resultByte);
-                client = resultInst;
-            }
-            return client;
-        }
-        */
+        static bool fakeImp = false;
+        #endregion
 
         public static void Init()
         {
-            AmongUsMemory.Main.ObserveShipStatus((uint x) =>
-            {
-                Console.WriteLine("Ship status changed", x);
-                Reset();
-            });
-
             Task.Factory.StartNew(() =>
             {
                 while (true)
@@ -49,7 +26,16 @@ namespace Cheat
                 }
             });
 
-            Task.Factory.StartNew(HandleConsole);
+            // Handle Console Commands
+            Task.Factory.StartNew(() =>
+            {
+                while (true)
+                {
+                    string input = Console.ReadLine().ToLower();
+                    RunCommand(input);
+                }
+            });
+
             Console.Clear();
             Console.WriteLine("Initialized cheat.");
         }
@@ -57,10 +43,9 @@ namespace Cheat
         public static void Reset()
         {
             foreach (AmongUsMemory.Player p in playerDatas) p.StopObserveState();
-            playerDatas = AmongUsMemory.Main.GetAllPlayers();
+            playerDatas = AmongUsMemory.GetObjects.GetAllPlayers();
             foreach (AmongUsMemory.Player p in playerDatas) p.StartObserveState();
             if (playerDatas.Count == 0) return;
-
 
             AmongUsMemory.Player player = playerDatas.Find((p) => p.IsLocalPlayer);
 
@@ -75,33 +60,10 @@ namespace Cheat
 
         public static void Update()
         {
-            //AmongUsMemory.PlayerData player = playerDatas.Find((p) => p.IsLocalPlayer);
-            //if (player == null) return;
+            AmongUsMemory.Player player = playerDatas.Find((p) => p.IsLocalPlayer);
+            if (player == null) return;
             //Console.WriteLine(player.Position.x + "f, " + player.Position.y + "f");
         }
-
-        public static void HandleConsole()
-        {
-            while (true)
-            {
-                string input = Console.ReadLine().ToLower();
-                RunCommand(input);
-            }
-        }
-
-        private static void SetImposter(AmongUsMemory.Player player, bool setIsImposter)
-        {
-            // keep track if the player is fake impostering to prevent killing while crewmate which doesnt actually register
-            IntPtr isImposterPtr = Utils.GetMemberPointer(player.playerInfoOffsetPtr, typeof(PlayerInfo), "IsImpostor");
-            int isImposter = Main.mem.ReadByte(isImposterPtr.GetAddress());
-            if ((fakeImp == false && isImposter == 0) || fakeImp == true) fakeImp = setIsImposter;
-            player?.Set_Impostor(Convert.ToByte(setIsImposter));
-
-            IntPtr killTimerPtr = Utils.GetMemberPointer(player.playerControlPtr, typeof(PlayerControl), "killTimer");
-            if (fakeImp) Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "60.0");
-            else Main.mem.UnfreezeValue(killTimerPtr.GetAddress());
-        }
-
 
         public static int RunCommand(string input)
         {
@@ -159,9 +121,24 @@ namespace Cheat
                     Console.WriteLine(input + " -> ok");
                     break;
                 case "test":
+                    AmongUsMemory.GetObjects.GetAmongUsClient();
                     break;
             }
             return 0;
+        }
+
+        #region Set
+        private static void SetImposter(AmongUsMemory.Player player, bool setIsImposter)
+        {
+            // keep track if the player is fake impostering to prevent killing while crewmate which doesnt actually register
+            IntPtr isImposterPtr = Utils.GetMemberPointer(player.playerInfoOffsetPtr, typeof(PlayerInfo), "IsImpostor");
+            int isImposter = Main.mem.ReadByte(isImposterPtr.GetAddress());
+            if ((fakeImp == false && isImposter == 0) || fakeImp == true) fakeImp = setIsImposter;
+            player?.Set_Impostor(Convert.ToByte(setIsImposter));
+
+            IntPtr killTimerPtr = Utils.GetMemberPointer(player.playerControlPtr, typeof(PlayerControl), "killTimer");
+            if (fakeImp) Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "60.0");
+            else Main.mem.UnfreezeValue(killTimerPtr.GetAddress());
         }
 
         public static int SetKillCoolDown(float seconds)
@@ -195,5 +172,6 @@ namespace Cheat
             Main.mem.FreezeValue(lightSourcePtr.GetAddress(), "float", brightness.ToString("0.0"));
             return 0;
         }
+        #endregion
     }
 }

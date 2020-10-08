@@ -7,12 +7,6 @@ namespace AmongUsMemory
 {
     public class Player
     {
-        #region ObserveStates
-        private bool player_hasDied = false;
-        #endregion
-
-        public System.Action<Vector2, byte> onDie;
-
         public IntPtr PlayerControl_GetData_Offset = IntPtr.Zero;
         public PlayerControl Instance;
 
@@ -24,6 +18,14 @@ namespace AmongUsMemory
 
 
         #region ObserveState
+        #region ObserveStates
+        private bool player_hasDied = false;
+        #endregion
+
+        #region Handlers
+        public System.Action<Vector2, byte> onDie;
+        #endregion
+
         Dictionary<string, CancellationTokenSource> Tokens = new Dictionary<string, CancellationTokenSource>();
 
         public void ObserveState()
@@ -132,10 +134,19 @@ namespace AmongUsMemory
             Main.mem.WriteMemory(targetPointer.GetAddress(), "byte", value.ToString());
         }
 
-        public void WriteMemory_KillTimer(float value)
+        public void Set_KillTimer(float value)
         {
             var targetPointer = Utils.GetMemberPointer(playerControlPtr, typeof(PlayerControl), "killTimer");
             Main.mem.WriteMemory(targetPointer.GetAddress(), "float", value.ToString());
+        }
+
+        public void Set_SetNameTextColor(Color value)
+        {
+            IntPtr targetPointer = Utils.GetMemberPointer(Instance.nameText, typeof(TextRenderer), "Color");
+            Main.mem.WriteMemory(targetPointer.GetAddress(), "float", value.r.ToString("0.0"));
+            Main.mem.WriteMemory((targetPointer + 4).GetAddress(), "float", value.g.ToString("0.0"));
+            Main.mem.WriteMemory((targetPointer + 8).GetAddress(), "float", value.b.ToString("0.0"));
+            Main.mem.WriteMemory((targetPointer + 12).GetAddress(), "float", value.a.ToString("0.0"));
         }
         #endregion
 

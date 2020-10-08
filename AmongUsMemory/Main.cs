@@ -12,10 +12,6 @@ namespace AmongUsMemory
         public static Memory.Mem mem = new Memory.Mem();
         public static ProcessMemory ProcessMemory = null;
 
-        // Increase this if your computer can't handle the load very well. On a Ryzen 3900x with 500ms delay it takes about 11-16% CPU usage.
-        // Remove the scanning later anyways and replace with a keybind system.
-        public static int SCAN_DELAY = 500;
-
         public static bool Init()
         {
             bool state = mem.OpenProcess("Among Us");
@@ -29,28 +25,29 @@ namespace AmongUsMemory
             return state;
         }
 
+        #region ObserveShipStatus
         private static ShipStatus prevShipStatus;
         private static ShipStatus shipStatus;
-        static Dictionary<string, CancellationTokenSource> Tokens = new Dictionary<string, CancellationTokenSource>();
-        static System.Action<uint> onChangeShipStatus;
 
+        private static Dictionary<string, CancellationTokenSource> Tokens = new Dictionary<string, CancellationTokenSource>();
+
+        public static System.Action<uint> onShipStatusUpdate;
 
         static void _ObserveShipStatus()
         {
             while (Tokens.ContainsKey("ObserveShipStatus") && Tokens["ObserveShipStatus"].IsCancellationRequested == false)
             {
-                Thread.Sleep(SCAN_DELAY);
-                shipStatus = GetShipStatus();
+                shipStatus = GetObjects.GetShipStatus();
                 if (prevShipStatus.OwnerId != shipStatus.OwnerId)
                 {
                     prevShipStatus = shipStatus;
-                    onChangeShipStatus?.Invoke(shipStatus.Type);
+                    onShipStatusUpdate?.Invoke(shipStatus.Type);
                 }
+                Thread.Sleep(ObserveDelays.ObserveShipStatus);
             }
         }
 
-
-        public static void ObserveShipStatus(System.Action<uint> onChangeShipStatus)
+        public static void ObserveShipStatus()
         {
             CancellationTokenSource cts = new CancellationTokenSource();
             if (Tokens.ContainsKey("ObserveShipStatus"))
@@ -60,27 +57,9 @@ namespace AmongUsMemory
             }
 
             Tokens.Add("ObserveShipStatus", cts);
-            Main.onChangeShipStatus = onChangeShipStatus;
-            //Task.Factory.StartNew(_ObserveShipStatus, cts.Token);
+            Task.Factory.StartNew(_ObserveShipStatus, cts.Token);
         }
-
-        public static ShipStatus GetShipStatus()
-        {
-            ShipStatus shipStatus = new ShipStatus();
-            byte[] shipAob = mem.ReadBytes(Pattern.ShipStatus_Pointer, Utils.SizeOf<ShipStatus>());
-            var aobStr = MakeAobString(shipAob, 4, "00 00 00 00 ?? ?? ?? ??");
-            var aobResults = mem.AoBScan(aobStr, true, true);
-            aobResults.Wait();
-            foreach (var result in aobResults.Result)
-            {
-                byte[] resultByte = mem.ReadBytes(result.GetAddress(), Utils.SizeOf<ShipStatus>());
-                ShipStatus resultInst = Utils.FromBytes<ShipStatus>(resultByte);
-                if (resultInst.AllVents != IntPtr.Zero && resultInst.NetId < uint.MaxValue - 10000)
-                    if (resultInst.MapScale < 6470545000000 && resultInst.MapScale > 0.1f)
-                        shipStatus = resultInst;
-            }
-            return shipStatus;
-        }
+        #endregion
 
         public static string MakeAobString(byte[] aobTarget, int length, string unknownText = "?? ?? ?? ??")
         {
@@ -106,37 +85,6 @@ namespace AmongUsMemory
                 }
             }
             return aobData;
-        }
-        public static List<Player> GetAllPlayers()
-        {
-            List<Player> datas = new List<Player>();
-
-            // find player pointer
-            byte[] playerAoB = mem.ReadBytes(Pattern.PlayerControl_Pointer, Utils.SizeOf<PlayerControl>());
-            // aob pattern
-            string aobData = MakeAobString(playerAoB, 4, "?? ?? ?? ??");
-            // get result 
-            var result = mem.AoBScan(aobData, true, true);
-            result.Wait();
-
-            var results = result.Result;
-            // real-player
-            foreach (var x in results)
-            {
-                var bytes = mem.ReadBytes(x.GetAddress(), Utils.SizeOf<PlayerControl>());
-                var PlayerControl = Utils.FromBytes<PlayerControl>(bytes);
-                // filter garbage instance datas.
-                if (PlayerControl.SpawnFlags == 257 && PlayerControl.NetId < uint.MaxValue - 10000)
-                {
-                    datas.Add(new Player()
-                    {
-                        Instance = PlayerControl,
-                        playerControlOffset = x.GetAddress(),
-                        playerControlPtr = new IntPtr((int)x)
-                    });
-                }
-            }
-            return datas;
         }
     }
 }
