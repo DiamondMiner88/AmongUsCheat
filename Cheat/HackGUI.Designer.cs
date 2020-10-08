@@ -25,6 +25,7 @@
         private void InitializeComponent() {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HackGUI));
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.checkbox_fullbright = new System.Windows.Forms.CheckBox();
             this.checkbox_highlightImposters = new System.Windows.Forms.CheckBox();
             this.checkbox_showConsole = new System.Windows.Forms.CheckBox();
             this.checkbox_instaKill = new System.Windows.Forms.CheckBox();
@@ -32,7 +33,6 @@
             this.checkbox_imposter = new System.Windows.Forms.CheckBox();
             this.checkbox_dead = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.checkbox_fullbright = new System.Windows.Forms.CheckBox();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -50,6 +50,17 @@
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Abilities";
+            // 
+            // checkbox_fullbright
+            // 
+            this.checkbox_fullbright.AutoSize = true;
+            this.checkbox_fullbright.Location = new System.Drawing.Point(6, 62);
+            this.checkbox_fullbright.Name = "checkbox_fullbright";
+            this.checkbox_fullbright.Size = new System.Drawing.Size(68, 17);
+            this.checkbox_fullbright.TabIndex = 5;
+            this.checkbox_fullbright.Text = "Fullbright";
+            this.checkbox_fullbright.UseVisualStyleBackColor = true;
+            this.checkbox_fullbright.CheckedChanged += new System.EventHandler(this.checkbox_fullbright_CheckedChanged);
             // 
             // checkbox_highlightImposters
             // 
@@ -104,6 +115,7 @@
             this.checkbox_imposter.TabIndex = 8;
             this.checkbox_imposter.Text = "Imposter";
             this.checkbox_imposter.UseVisualStyleBackColor = true;
+            this.checkbox_imposter.CheckedChanged += new System.EventHandler(this.checkbox_imposter_CheckedChanged);
             // 
             // checkbox_dead
             // 
@@ -127,17 +139,6 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Roles";
-            // 
-            // checkbox_fullbright
-            // 
-            this.checkbox_fullbright.AutoSize = true;
-            this.checkbox_fullbright.Location = new System.Drawing.Point(6, 62);
-            this.checkbox_fullbright.Name = "checkbox_fullbright";
-            this.checkbox_fullbright.Size = new System.Drawing.Size(68, 17);
-            this.checkbox_fullbright.TabIndex = 5;
-            this.checkbox_fullbright.Text = "Fullbright";
-            this.checkbox_fullbright.UseVisualStyleBackColor = true;
-            this.checkbox_fullbright.CheckedChanged += new System.EventHandler(this.checkbox_fullbright_CheckedChanged);
             // 
             // HackGUI
             // 

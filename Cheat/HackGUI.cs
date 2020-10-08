@@ -80,5 +80,11 @@ namespace Cheat
             if ((sender as CheckBox).Checked) Memory.RunCommand("fullbright");
             else Memory.RunCommand("nofullbright");
         }
+
+        private void checkbox_imposter_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as CheckBox).Checked) Memory.RunCommand("imposter");
+            else Memory.RunCommand("crewmate");
+        }
     }
 }
