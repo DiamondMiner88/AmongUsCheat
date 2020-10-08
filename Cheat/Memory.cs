@@ -49,11 +49,20 @@ namespace Cheat
 
             AmongUsMemory.Player player = playerDatas.Find((p) => p.IsLocalPlayer);
 
-            if (fakeImp != true && player != null)
+            if (player != null)
             {
-                IntPtr killTimerPtr = AmongUsMemory.Utils.GetMemberPointer(player.PlayerControlOffsetPtr, typeof(PlayerControl), "killTimer");
-                AmongUsMemory.Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "0.0");
+                player.Set_SetNameTextColor(new Color(0, 255, 0, 1));
+
+
+
+                if (fakeImp)
+                {
+                    IntPtr killTimerPtr = AmongUsMemory.Utils.GetMemberPointer(player.PlayerControlOffsetPtr, typeof(PlayerControl), "killTimer");
+                    AmongUsMemory.Main.mem.FreezeValue(killTimerPtr.GetAddress(), "float", "0.0");
+                }
             }
+
+            playerDatas.FindAll((p) => p.PlayerInfo?.IsImpostor == 1).ForEach((p) => p.Set_SetNameTextColor(new Color(255, 0, 0, 1)));
 
             Console.WriteLine("Reset");
         }
