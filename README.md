@@ -1,5 +1,7 @@
 # AmongUsCheat
-Hacks for Among Us in development
+Hacks for Among Us not in development\
+
+**Project dropped**
 
 **Only make an issue if you have the latest release version AND have read the known issues**\
 Among Us version **v2020.9.22s** *only*
